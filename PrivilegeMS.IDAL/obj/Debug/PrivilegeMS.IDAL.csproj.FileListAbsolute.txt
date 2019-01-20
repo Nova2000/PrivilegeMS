@@ -1,0 +1,34 @@
+E:\学习文件\Git\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\obj\Debug\PrivilegeMS.IDAL.csprojAssemblyReference.cache
+E:\学习文件\Git\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\obj\Debug\PrivilegeMS.IDAL.csproj.CoreCompileInputs.cache
+E:\学习文件\Git\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\bin\Debug\PrivilegeMS.IDAL.dll.config
+E:\学习文件\Git\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\bin\Debug\PrivilegeMS.IDAL.dll
+E:\学习文件\Git\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\bin\Debug\PrivilegeMS.IDAL.pdb
+E:\学习文件\Git\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\bin\Debug\EntityFramework.dll
+E:\学习文件\Git\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\bin\Debug\EntityFramework.SqlServer.dll
+E:\学习文件\Git\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\bin\Debug\PrivilegeMS.Model.dll
+E:\学习文件\Git\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\bin\Debug\PrivilegeMS.Model.pdb
+E:\学习文件\Git\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\bin\Debug\PrivilegeMS.Model.dll.config
+E:\学习文件\Git\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\bin\Debug\EntityFramework.xml
+E:\学习文件\Git\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\bin\Debug\EntityFramework.SqlServer.xml
+E:\学习文件\Git\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\obj\Debug\PrivilegeMS.IDAL.csproj.CopyComplete
+E:\学习文件\Git\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\obj\Debug\PrivilegeMS.IDAL.dll
+E:\学习文件\Git\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\obj\Debug\PrivilegeMS.IDAL.pdb
+E:\学习文件\Git\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\bin\Debug\zh-Hans\EntityFramework.resources.dll
+E:\学习文件\Git\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\bin\Debug\zh-Hans\EntityFramework.SqlServer.resources.dll
+D:\Project Engineering\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\bin\Debug\PrivilegeMS.IDAL.dll.config
+D:\Project Engineering\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\bin\Debug\PrivilegeMS.IDAL.dll
+D:\Project Engineering\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\bin\Debug\PrivilegeMS.IDAL.pdb
+D:\Project Engineering\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\bin\Debug\EntityFramework.dll
+D:\Project Engineering\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\bin\Debug\EntityFramework.SqlServer.dll
+D:\Project Engineering\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\bin\Debug\PrivilegeMS.Model.dll
+D:\Project Engineering\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\bin\Debug\PrivilegeMS.Model.pdb
+D:\Project Engineering\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\bin\Debug\PrivilegeMS.Model.dll.config
+D:\Project Engineering\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\bin\Debug\EntityFramework.xml
+D:\Project Engineering\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\bin\Debug\EntityFramework.SqlServer.xml
+D:\Project Engineering\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\bin\Debug\zh-Hans\EntityFramework.resources.dll
+D:\Project Engineering\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\bin\Debug\zh-Hans\EntityFramework.SqlServer.resources.dll
+D:\Project Engineering\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\obj\Debug\PrivilegeMS.IDAL.csprojAssemblyReference.cache
+D:\Project Engineering\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\obj\Debug\PrivilegeMS.IDAL.csproj.CoreCompileInputs.cache
+D:\Project Engineering\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\obj\Debug\PrivilegeMS.IDAL.csproj.CopyComplete
+D:\Project Engineering\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\obj\Debug\PrivilegeMS.IDAL.dll
+D:\Project Engineering\PrivilegeMS\PrivilegeMS\PrivilegeMS.IDAL\obj\Debug\PrivilegeMS.IDAL.pdb

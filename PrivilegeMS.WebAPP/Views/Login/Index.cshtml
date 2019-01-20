@@ -1,0 +1,38 @@
+﻿
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>首页</title>
+    <script src="~/Scripts/jquery-2.1.0.min.js"></script>
+</head>
+<body>
+    <input type="text" id="name" name="name" value="" />
+    <input type="password" id="pwd" name="pwd" value="" />
+    <button id="btn"> 点击</button>
+</body>
+<script>
+    $("#btn").click(function () {
+        $.ajax({
+            type: "POST",
+            url: "Login/UserLogin",
+            data: {
+                "Name": $("#name").val(),
+                "Pwd":$("#pwd").val()
+            },
+            success: function (data) {
+                if (data == "ok") {
+                    window.location = "Home/index";
+                } else {
+                    alert("账号密码错误");
+                }
+            },
+            error: function (data) {
+                alert(data);
+            }
+        })
+    })
+</script>
+</html>
