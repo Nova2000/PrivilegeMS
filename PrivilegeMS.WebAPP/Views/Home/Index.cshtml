@@ -8,8 +8,8 @@
     <title>首页</title>
     <script src="~/Scripts/vue.min.js"></script>
     @*<script src="~/Scripts/jquery-2.1.0.min.js"></script>*@
-    <script src="~/Scripts/vue-resource.js"></script>
-    @*<script src="~/Scripts/axios.min.js"></script>*@
+    @*<script src="~/Scripts/vue-resource.js"></script>*@
+    <script src="~/Scripts/axios.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -117,8 +117,11 @@
         },
         methods: {
             getRequest: function () {
-                this.$http.get(this.apiUrl).then(function (res) {
-                    this.jsondata = res.body;
+                //this.$http.get(this.apiUrl).then(function (res) {
+                //    this.jsondata = res.body;
+                //})
+                axios.get(this.apiUrl).then(function (res) {
+                    vm.jsondata = res.data;
                 })
             },
             timeFormat: function (time) {

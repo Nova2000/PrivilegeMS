@@ -17,14 +17,14 @@
     $("#btn").click(function () {
         $.ajax({
             type: "POST",
-            url: "Login/UserLogin",
+            url: "/Login/UserLogin",
             data: {
                 "Name": $("#name").val(),
                 "Pwd":$("#pwd").val()
             },
             success: function (data) {
                 if (data == "ok") {
-                    window.location = "Home/index";
+                    window.location = "/Home/index";
                 } else {
                     alert("账号密码错误");
                 }
