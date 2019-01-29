@@ -86,8 +86,7 @@ namespace PrivilegeMS.DAL
             }
             catch
             {
-                throw new NotImplementedException();
-
+                return false;
             }
         }
         #endregion
