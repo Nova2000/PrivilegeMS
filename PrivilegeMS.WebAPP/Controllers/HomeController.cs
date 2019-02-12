@@ -17,11 +17,20 @@ namespace PrivilegeMS.WebAPP.Controllers
         {
             return View();
         }
+       
+        //GET 获取用户列表
         public ActionResult UserList()
         {
             var user = userInfoService.LoadEntities(u => u.DelFlag == true);
             return Json(user, JsonRequestBehavior.AllowGet);
         }
+        /// <summary>
+        /// POST 添加用户
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="accountNum"></param>
+        /// <param name="pwd"></param>
+        /// <returns></returns>
         public ActionResult AddUser(string name,string accountNum,string pwd)
         {
             Model.UserInfo userInfo = new UserInfo()
@@ -42,6 +51,7 @@ namespace PrivilegeMS.WebAPP.Controllers
                 return Content("no");
             }
         }
+        // POST 删除用户
         public ActionResult DeleteUser(int id)
         {
             
@@ -51,6 +61,22 @@ namespace PrivilegeMS.WebAPP.Controllers
                 user.DelFlag = false;
                 var delflag = userInfoService.EditEntity(user);
                 if (delflag)
+                {
+                    return Content("ok");
+                }
+            }
+            return Content("no");
+        }
+        public ActionResult EditUser(int id,string name,string pwd)
+        {
+            var user = userInfoService.LoadEntities(u => u.ID == id && u.DelFlag == true).FirstOrDefault();
+            if (user != null)
+            {
+                user.Name = name;
+                user.Pwd = pwd;
+                user.ModifiedTime = DateTime.Now;
+                var editflag = userInfoService.EditEntity(user);
+                if (editflag)
                 {
                     return Content("ok");
                 }
