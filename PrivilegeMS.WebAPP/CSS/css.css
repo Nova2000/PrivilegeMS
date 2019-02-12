@@ -1,0 +1,25 @@
+﻿
+li {
+    list-style: none
+}
+.container-fluid {
+    margin-top: 20px;
+}
+
+.input-group {
+    margin: 10px 0 10px 0;
+}
+
+.panel-body, .info th {
+    text-align: center;
+}
+
+.btn-sm {
+    margin: 0 5px;
+}
+
+
+.btn-sm {
+    display: inline;
+}
+
