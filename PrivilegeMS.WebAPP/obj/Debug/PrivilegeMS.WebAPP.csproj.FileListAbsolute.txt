@@ -295,3 +295,6 @@ D:\Project Engineering\PrivilegeMS\PrivilegeMS.WebAPP\obj\Debug\PrivilegeMS.WebA
 D:\Project Engineering\PrivilegeMS\PrivilegeMS.WebAPP\obj\Debug\PrivilegeMS.WebAPP.csproj.CopyComplete
 D:\Project Engineering\PrivilegeMS\PrivilegeMS.WebAPP\obj\Debug\PrivilegeMS.WebAPP.dll
 D:\Project Engineering\PrivilegeMS\PrivilegeMS.WebAPP\obj\Debug\PrivilegeMS.WebAPP.pdb
+D:\Project Engineering\PrivilegeMS\PrivilegeMS.WebAPP\bin\Newtonsoft.Json.dll
+D:\Project Engineering\PrivilegeMS\PrivilegeMS.WebAPP\bin\Newtonsoft.Json.pdb
+D:\Project Engineering\PrivilegeMS\PrivilegeMS.WebAPP\bin\Newtonsoft.Json.xml

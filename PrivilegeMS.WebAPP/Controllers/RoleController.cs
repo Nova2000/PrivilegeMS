@@ -5,12 +5,18 @@ using System.Web;
 using System.Web.Mvc;
 using PrivilegeMS.IBLL;
 using PrivilegeMS.BLL;
+using Newtonsoft.Json;
 namespace PrivilegeMS.WebAPP.Controllers
 {
     public class RoleController : Controller
     {
         IBLL.IRoleInfoService roleInfoService = new BLL.RoleInfoService();
         IBLL.IActionInfoService ActionInfoService = new BLL.ActionInfoService();
+        JsonSerializerSettings setting = new JsonSerializerSettings()
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            Formatting = Formatting.None
+        };
         // GET: Role
         public ActionResult Index()
         {
@@ -21,7 +27,13 @@ namespace PrivilegeMS.WebAPP.Controllers
         public ActionResult RoleList()
         {
             var role = roleInfoService.LoadEntities(r => r.DelFlag == true);
-            return Json(role, JsonRequestBehavior.AllowGet);
+            //JsonSerializerSettings setting = new JsonSerializerSettings()
+            //{
+            //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            //    Formatting = Formatting.None
+            //};
+            var ret = JsonConvert.SerializeObject(role, setting);
+            return Json(ret, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
         public ActionResult AddRole(string name,string remark,int sort)
@@ -74,6 +86,7 @@ namespace PrivilegeMS.WebAPP.Controllers
         }
         public ActionResult Actioninfo(int id)
         {
+            //int id = int.Parse(Request["id"]);
             var roleinfo = roleInfoService.LoadEntities(r => r.ID == id && r.DelFlag == true).FirstOrDefault();
             if (roleinfo != null)
             {
@@ -81,7 +94,9 @@ namespace PrivilegeMS.WebAPP.Controllers
                                       select a.ID).ToList();
                 var actioninfo = ActionInfoService.LoadEntities(a => a.DelFlag == true);
                 //var actioninfo = ActionInfoService.LoadEntities(a => a.DelFlag == true && !roleInfoAction.Contains(a.ID)).FirstOrDefault();
-                return Json(actioninfo, JsonRequestBehavior.AllowGet);
+                var ret = JsonConvert.SerializeObject(actioninfo, setting);
+                return Json(ret, JsonRequestBehavior.AllowGet);
+                //return Json(actioninfo, JsonRequestBehavior.AllowGet);
             }
             return Content("no");
             //return Content("no");

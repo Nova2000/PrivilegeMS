@@ -230,7 +230,7 @@
             //获取角色列表
             getRequest: function () {
                 axios.get(this.roleListApiUrl).then(function (res) {
-                    roleInfo.jsondata = res.data;
+                    roleInfo.jsondata = JSON.parse(res.data)
                 })
             },
             //添加角色
@@ -333,10 +333,10 @@
                 this.userRole.name = rol.Name;
                 this.userRole.subTime = rol.SubTime;
                 this.userRole.remark = rol.Remark;
-                axios.get(this.actionApiUrl, {
+                axios.post(this.actionApiUrl, {
                     id: roleInfo.userRole.id
-                }).then(response => {
-                    roleInfo.noActionData = response.data;
+                }).then(function(response){
+                    roleInfo.noActionData = JSON.parse(response.data);
                 })
             },
             //关闭权限配置页面
