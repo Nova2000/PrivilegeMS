@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IBaseService.cs" />
+    <Compile Include="IRoleInfoService.cs" />
     <Compile Include="IService.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
