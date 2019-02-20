@@ -84,6 +84,23 @@ namespace PrivilegeMS.WebAPP.Controllers
             }
             return Content("no");
         }
+        //获取角色未分配权限
+        public ActionResult NoActioninfo(int id)
+        {
+            //int id = int.Parse(Request["id"]);
+            var roleinfo = roleInfoService.LoadEntities(r => r.ID == id && r.DelFlag == true).FirstOrDefault();
+            if (roleinfo != null)
+            {
+                var roleInfoAction = (from a in roleinfo.ActionInfo
+                                      select a.ID).ToList();
+                var actioninfo = ActionInfoService.LoadEntities(a => a.DelFlag == true && !roleInfoAction.Contains(a.ID));
+                var ret = JsonConvert.SerializeObject(actioninfo, setting);
+                return Json(ret, JsonRequestBehavior.AllowGet);
+            }
+            return Content("no");
+           
+        }
+        //获取角色已有权限
         public ActionResult Actioninfo(int id)
         {
             //int id = int.Parse(Request["id"]);
@@ -92,16 +109,11 @@ namespace PrivilegeMS.WebAPP.Controllers
             {
                 var roleInfoAction = (from a in roleinfo.ActionInfo
                                       select a.ID).ToList();
-                var actioninfo = ActionInfoService.LoadEntities(a => a.DelFlag == true);
-                //var actioninfo = ActionInfoService.LoadEntities(a => a.DelFlag == true && !roleInfoAction.Contains(a.ID)).FirstOrDefault();
+                var actioninfo = ActionInfoService.LoadEntities(a => a.DelFlag == true && roleInfoAction.Contains(a.ID));
                 var ret = JsonConvert.SerializeObject(actioninfo, setting);
                 return Json(ret, JsonRequestBehavior.AllowGet);
-                //return Json(actioninfo, JsonRequestBehavior.AllowGet);
             }
             return Content("no");
-            //return Content("no");
-            //var actioninfo = ActionInfoService.LoadEntities(a => a.DelFlag == true);
-            //return Json(actioninfo, JsonRequestBehavior.AllowGet);
 
         }
         public ActionResult SetRoleAction(int id,string idList)

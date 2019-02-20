@@ -8,7 +8,8 @@
     <title>首页</title>
     <script src="~/Scripts/vue.min.js"></script>
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    @*<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">*@
+    <link href="~/CSS/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.7.0/animate.min.css">
     <script src="~/Scripts/axios.min.js"></script>
     <link href="~/CSS/css.css" rel="stylesheet" />
@@ -206,6 +207,7 @@
             //提交权限配置
             roleActionPostApiUrl:'/Role/SetRoleAction',
             //权限
+            noActionApiUrl: '/Role/NoActioninfo',
             actionApiUrl:'/Role/Actioninfo',
             actionData: [],
             noActionData:[],
@@ -333,11 +335,18 @@
                 this.userRole.name = rol.Name;
                 this.userRole.subTime = rol.SubTime;
                 this.userRole.remark = rol.Remark;
+                axios.post(this.noActionApiUrl, {
+                    id: roleInfo.userRole.id
+                }).then(res => {
+                    roleInfo.noActionData = JSON.parse(res.data);
+                });
                 axios.post(this.actionApiUrl, {
                     id: roleInfo.userRole.id
-                }).then(function(response){
-                    roleInfo.noActionData = JSON.parse(response.data);
-                })
+                }).then(res => {
+                    roleInfo.actionData = JSON.parse(res.data);
+                    });
+
+
             },
             //关闭权限配置页面
             roleClose: function () {
@@ -345,6 +354,7 @@
                 this.roleActionFlag = false;
                 this.userRole = [{ id: '', name: '', subTime: '', remark: '' }];
                 this.actionData = [];
+                this.noActionData = [];
             },
             //添加权限
             roleActionAdd: function (i) {
@@ -375,7 +385,9 @@
                     } else {
                         alert("no");
                     }
-                })
+                    });
+                this.roleClose();
+
             }
 
         },
