@@ -16,7 +16,7 @@
 </head>
 <body>
     <div class="container-fluid" id="role">
-
+        <!--角色信息展示-->
         <div class="col-lg-6 animated fadeIn" v-show="listFlag">
             <div id="roleList">
                 <div class="panel panel-primary">
@@ -52,13 +52,12 @@
                                 </tr>
                             </tbody>
                         </table>
-                       
+
                     </div>
                 </div>
             </div>
         </div>
-
-
+        <!--角色信息添加-->
         <div class="col-lg-6 animated fadeIn" v-show="addFlag">
             <div class="panel panel-info">
                 <div class="panel-heading">
@@ -81,7 +80,7 @@
                 </div>
             </div>
         </div>
-
+        <!--修改角色信息-->
         <div class="col-lg-6 animated fadeIn" v-show="panelShowFlag">
             <div class="panel panel-warning">
                 <div class="panel-heading">
@@ -100,12 +99,15 @@
                         <span class="input-group-addon" id="basic-addon1">权重</span>
                         <input type="number" class="form-control" placeholder="请输入新的权重(数字)" aria-describedby="basic-addon1" v-model="editsort">
                     </div>
-                    <button class="btn btn-default pull-left" v-on:click="editpanelClose">关闭</button>
-                    <button class="btn btn-success pull-right" v-on:click="editrole">提交</button>
+                    <div class="col-lg-5 pull-left">
+                        <button class="btn btn-default btn-block " v-on:click="editpanelClose">关闭</button>
+                    </div><div class="col-lg-5 pull-right">
+                        <button class="btn btn-success btn-block " v-on:click="editrole">提交</button>
+                    </div>
                 </div>
             </div>
         </div>
-
+        <!--角色权限分配-->
         <div class="col-lg-10 col-lg-offset-1 animated fadeIn " v-show="roleActionFlag">
             <div class="panel panel-primary">
                 <div class="panel-heading">
@@ -114,7 +116,7 @@
                         <div class="col-lg-3"><strong>角色名称：</strong>{{userRole["name"]}}</div>
                         <div class="col-lg-3"><strong>注册时间：</strong>{{userRole.subTime| timeFormat('en')}}</div>
                         <div class="col-lg-3"><strong>简介：</strong>{{userRole.remark}}</div>
-                        
+
                     </div>
                 </div>
                 <div class="panel-body">
@@ -133,7 +135,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(item,i) in actionData" :key="i" >
+                            <tr v-for="(item,i) in actionData" :key="i">
                                 <td v-text="i+1"></td>
                                 <td v-text="item.Name"></td>
                                 <td>{{item.SubTime | timeFormat('en')}}</td>
@@ -177,10 +179,10 @@
                         </tbody>
                     </table>
                     <div class="col-lg-4 pull-left">
-                        <button class="btn btn-default btn-block pull-left" v-on:click="roleClose">取消</button>
+                        <button class="btn btn-default btn-block " v-on:click="roleClose">取消</button>
                     </div>
                     <div class="col-lg-4 pull-right">
-                        <button class="btn btn-success btn-block pull-right" v-on:click="roleActionPost">提交</button>
+                        <button class="btn btn-success btn-block" v-on:click="roleActionPost">提交</button>
                     </div>
                 </div>
             </div>

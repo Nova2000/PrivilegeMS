@@ -116,6 +116,7 @@ namespace PrivilegeMS.WebAPP.Controllers
             return Content("no");
 
         }
+        //设置角色权限
         public ActionResult SetRoleAction(int id,string idList)
         {
             string[] IdListS = idList.Substring(1, idList.Length - 2).Split(',');
