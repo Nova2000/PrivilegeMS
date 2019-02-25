@@ -5,12 +5,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Newtonsoft.Json;
 
 namespace PrivilegeMS.WebAPP.Controllers
 {
     public class UserController : Controller
     {
         IBLL.IUserInfoService userInfoService = new UserInfoService();
+        IBLL.IRoleInfoService roleInfoService = new RoleInfoService();
+        //解决Json序列化的时候，带有索引属性的对象产生双向引用的BUG
+        JsonSerializerSettings setting = new JsonSerializerSettings()
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            Formatting = Formatting.None
+        };
+
         // GET: Home
         [HttpGet]
         public ActionResult Index()
@@ -23,7 +32,8 @@ namespace PrivilegeMS.WebAPP.Controllers
         public ActionResult UserList()
         {
             var user = userInfoService.LoadEntities(u => u.DelFlag == true);
-            return Json(user, JsonRequestBehavior.AllowGet);
+            var ret = JsonConvert.SerializeObject(user, setting);
+            return Content(ret);
         }
         /// <summary>
         /// POST 添加用户
@@ -82,6 +92,50 @@ namespace PrivilegeMS.WebAPP.Controllers
                 user.ModifiedTime = DateTime.Now;
                 var editflag = userInfoService.EditEntity(user);
                 if (editflag)
+                {
+                    return Content("ok");
+                }
+            }
+            return Content("no");
+        }
+        //获取已有角色身份
+        public ActionResult GetUsetRoleList(int id)
+        {
+            var userinfo = userInfoService.LoadEntities(u => u.ID == id && u.DelFlag == true).FirstOrDefault();
+            if (userinfo!=null)
+            {
+                var userRoleIdList = (from a in userinfo.RoleInfo select a.ID).ToList();
+                var roleinfo = roleInfoService.LoadEntities(r => r.DelFlag == true&& userRoleIdList.Contains(r.ID)).Select(r => new { ID = r.ID, Name = r.Name, SubTime = r.SubTime, Remark = r.Remark,Sort=r.Sort });
+                string jsonTxt = JsonConvert.SerializeObject(roleinfo, Newtonsoft.Json.Formatting.Indented);
+                return Content(jsonTxt);
+            }
+            return Content("no");
+        }
+        //获取未有角色身份
+        public ActionResult GetUsetOutsideRoleList(int id)
+        {
+            var userinfo = userInfoService.LoadEntities(u => u.ID == id && u.DelFlag == true).FirstOrDefault();
+            if (userinfo != null)
+            {
+                var userRoleIdList = (from a in userinfo.RoleInfo select a.ID).ToList();
+                var roleinfo = roleInfoService.LoadEntities(r => r.DelFlag == true&& !userRoleIdList.Contains(r.ID)).Select(r => new { ID = r.ID, Name = r.Name, SubTime = r.SubTime, Remark = r.Remark, Sort = r.Sort });
+                string jsonTxt = JsonConvert.SerializeObject(roleinfo, Newtonsoft.Json.Formatting.Indented);
+                return Content(jsonTxt);
+            }
+            return Content("no");
+        }
+        //修改用户角色身份
+        public ActionResult EditUserRole(string idList,int id)
+        {
+            string[] IdListS = idList.Substring(1, idList.Length - 2).Split(',');
+            if (IdListS[0]!="")
+            {
+                List<int> IdList = new List<int>();
+                foreach (var item in IdListS)
+                {
+                    IdList.Add(Convert.ToInt32(item));
+                }
+                if (userInfoService.SetUserRoleInfo(id, IdList))
                 {
                     return Content("ok");
                 }

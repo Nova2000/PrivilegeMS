@@ -15,8 +15,8 @@
 </head>
 <body>
     <div class="container-fluid" id="user">
-
-        <div class="col-lg-6 animated fadeIn">
+        <!--用户信息展示-->
+        <div class="col-lg-6 animated fadeIn" v-show="userListPanelShowFlag">
             <div id="userList">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
@@ -36,16 +36,17 @@
                             </thead>
                             <!-- :class="{'trs':i%2==0}" -->
                             <tbody>
-                                <tr v-for="(item,i) in jsondata" :key="i" :class="{'trs':i%2==0}">
+                                <tr v-for="(item,i) in userListData" :key="i" :class="{'trs':i%2==0}">
                                     <td v-text="i+1"></td>
                                     <td v-text="item.Name"></td>
                                     <td v-text="item.AccountNum">123456789</td>
                                     <td v-text="item.Pwd">123456789</td>
                                     <td>{{item.SubTime | timeFormat('en')}}</td>
                                     <td>
-                                        <a class=" btn btn-danger btn-sm" v-on:click="deluser(i,item.ID)" v-show="deleteFlag">删除</a>
-                                        <a class="btn btn-success btn-sm" v-on:click="editpanelOpen(item.Name)" v-show="editFlag">修改</a>
-                                        <a class="btn btn-info btn-sm" v-on:click="" v-show="roleFlag">权限</a>
+                                        <a class="btn btn-default btn-sm" v-on:click="editpanelOpen(item.Name)" v-show="editBtnFlag">修改</a>
+                                        <a class="btn btn-info btn-sm" v-on:click="" v-show="actionBtnFlag">权限</a>
+                                        <a class="btn btn-success btn-sm" v-on:click="rolepanelOpen(i)" v-show="roleBtnFlag">角色</a>
+                                        <a class=" btn btn-danger btn-sm" v-on:click="deluser(i,item.ID)" v-show="deleteBtnFlag">删除</a>
 
                                     </td>
                                 </tr>
@@ -60,9 +61,8 @@
                 </div>
             </div>
         </div>
-
-
-        <div class="col-lg-6 animated fadeIn" v-show="addFlag">
+        <!--添加用户-->
+        <div class="col-lg-6 animated fadeIn" v-show="addUserPanelShowFlag">
             <div class="panel panel-info">
                 <div class="panel-heading">
                     <h3>添加用户</h3>
@@ -84,8 +84,8 @@
                 </div>
             </div>
         </div>
-
-        <div class="col-lg-6 animated fadeIn" v-show="panelShowFlag">
+        <!--修改用户-->
+        <div class="col-lg-6 animated fadeIn" v-show="editUserPanelShowFlag">
             <div class="panel panel-warning">
                 <div class="panel-heading">
                     <h3>修改用户</h3>
@@ -108,6 +108,159 @@
                 </div>
             </div>
         </div>
+        <!--用户角色-->
+        <div class="col-lg-10 col-lg-offset-1 animated fadeIn " v-show="userRolePanelShowFlag">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3>用户角色</h3>
+                    <div class="container">
+                        <div class="col-lg-3"><strong>账号：</strong>{{userRoleModel.useraccountNum}}</div>
+                        <div class="col-lg-3"><strong>用户名：</strong>{{userRoleModel["name"]}}</div>
+                        @*<div class="col-lg-3"><strong>注册时间：</strong>{{userRoleModel.subTime | timeFormat('en')}}</div>*@
+
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <table class="table  table-hover table-bordered">
+                        <caption class="text-center"><h4>已分配角色</h4></caption>
+                        <thead>
+                            <tr class="info">
+                                <th>序号</th>
+                                <th>名称</th>
+                                <th>创建时间</th>
+                                <th>权重</th>
+                                <th>简介</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(item,i) in roleListData" :key="i">
+                                <td v-text="i+1">序号</td>
+                                <td v-text="item.Name">名称</td>
+                                <td>{{item.SubTime | timeFormat('en')}}</td>
+                                <td v-text="item.Sort">简介</td>
+                                <td v-text="item.Remark">权重</td>
+                                <td>
+                                    <a class=" btn btn-danger btn-sm" v-on:click="delRole(i)">禁用</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table  table-hover table-bordered">
+                        <caption class="text-center"><h4>未分配角色</h4></caption>
+                        <thead>
+                            <tr class="info">
+                                <th>序号</th>
+                                <th>名称</th>
+                                <th>创建时间</th>
+                                <th>权重</th>
+                                <th>简介</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(item,i) in noRoleListData" :key="i" :class="{'trs':i%2==0}">
+                                <td v-text="i+1">序号</td>
+                                <td v-text="item.Name">名称</td>
+                                <td>{{item.SubTime | timeFormat('en')}}</td>
+                                <td v-text="item.Sort">简介</td>
+                                <td v-text="item.Remark">权重</td>
+                                <td>
+                                    <a class=" btn btn-success btn-sm" v-on:click="addRole(i)">启用</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="col-lg-4 pull-left">
+                        <button class="btn btn-default btn-block " v-on:click="rolepanelClose">取消</button>
+                    </div>
+                    <div class="col-lg-4 pull-right">
+                        <button class="btn btn-success btn-block" v-on:click="userRolePost">提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--用户权限-->
+        <div class="col-lg-10 col-lg-offset-1 animated fadeIn " v-show="userActionPanelShowFlag">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3>角色权限</h3>
+                    <div class="container">
+                        <div class="col-lg-3"><strong>角色名称：</strong>@*{{userRole["name"]}}*@</div>
+                        <div class="col-lg-3"><strong>注册时间：</strong>@*{{userRole.subTime| timeFormat('en')}}*@</div>
+                        <div class="col-lg-3"><strong>简介：</strong>@*{{userRole.remark}}*@</div>
+
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <table class="table  table-hover table-bordered">
+                        <caption class="text-center"><h4>已有权限</h4></caption>
+                        <thead>
+                            <tr class="info">
+                                <th>序号</th>
+                                <th>名称</th>
+                                <th>创建时间</th>
+                                <th>URL</th>
+                                <th>请求方式</th>
+                                <th>属性</th>
+                                <th>简介</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(item,i) in userListData" :key="i">
+                                <td v-text="i+1"></td>
+                                <td v-text="item.Name"></td>
+                                <td>{{item.SubTime | timeFormat('en')}}</td>
+                                <td v-text="item.Url" class="text-left"></td>
+                                <td v-text="item.HttpMethod"></td>
+                                <td v-text="item.ActionType==0?'非菜单权限':'菜单权限'"></td>
+                                <td v-text="item.Remark">简介</td>
+                                <td>
+                                    <a class=" btn btn-danger btn-sm" v-on:click="roleActionDel(i)">禁用</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table  table-hover table-bordered">
+                        <caption class="text-center"><h4>未分配权限</h4></caption>
+                        <thead>
+                            <tr class="info">
+                                <th>序号</th>
+                                <th>名称</th>
+                                <th>创建时间</th>
+                                <th>URL</th>
+                                <th>请求方式</th>
+                                <th>属性</th>
+                                <th>简介</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(item,i) in userListData" :key="i" :class="{'trs':i%2==0}">
+                                <td v-text="i+1"></td>
+                                <td v-text="item.Name"></td>
+                                <td>{{item.SubTime | timeFormat('en')}}</td>
+                                <td v-text="item.Url" class="text-left"></td>
+                                <td v-text="item.HttpMethod"></td>
+                                <td v-text="item.ActionType==0?'非菜单权限':'菜单权限'"></td>
+                                <td v-text="item.Remark">简介</td>
+                                <td>
+                                    <a class=" btn btn-success btn-sm" v-on:click="">启用</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="col-lg-4 pull-left">
+                        <button class="btn btn-default btn-block " v-on:click="">取消</button>
+                    </div>
+                    <div class="col-lg-4 pull-right">
+                        <button class="btn btn-success btn-block" v-on:click="">提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
     <a class="btn btn-default btn-block" href="/home/index"> 返回首页</a>
     
@@ -116,9 +269,20 @@
     var user = new Vue({
         el: "#user",
         data: {
+            //权限
+            userListPanelShowFlag: true,
+            editUserPanelShowFlag: false,
+            addUserPanelShowFlag: true,
+            userRolePanelShowFlag: false,
+            userActionPanelShowFlag: false,
+            deleteBtnFlag: true,
+            editBtnFlag: true,
+            roleBtnFlag: true,
+            actionBtnFlag: true,
+
             //获取userList
             userListApiUrl: '/User/UserList',
-            jsondata: [],
+            userListData: [],
             //添加user
             addUserApiUrl: '/User/AddUser',
             name: '',
@@ -131,20 +295,33 @@
             Student: [
                 { editname: '', userID: "", editpwd: "", useraccountNum: "" }
             ],
-            //权限
-            panelShowFlag: false,
-            deleteFlag: true,
-            editFlag: true,
-            roleFlag: false,
-            addFlag: true,
+            //用户角色
+            userRoleModel: [{
+                id:"",
+                name: "",
+                useraccountNum: "",
+                subTime:'/Date(1544803612683)/'
+            }],
+            //用户角色列表
+            roleListApi:'/User/GetUsetRoleList',
+            roleListData: [],
+            noRoleListApi: '/User/GetUsetOutsideRoleList',
+            noRoleListData: [],
+            userRolePostApi:'/User/EditUserRole',
+            //权限列表
+            actionListApi:'',
+            actionListData: [],
+            noActionLsitApi:'',
+            noActionListData:[],
+           
         },
         methods: {
             getRequest: function () {
                 //this.$http.get(this.apiUrl).then(function (res) {
-                //    this.jsondata = res.body;
+                //    this.userListData = res.body;
                 //})
                 axios.get(this.userListApiUrl).then(function (res) {
-                    user.jsondata = res.data;
+                    user.userListData = res.data;
                 })
             },
             timeFormat: function (time) {
@@ -188,9 +365,9 @@
                 }
             },
             editpanelOpen: function (userID) {
-                if (!this.panelShowFlag) {
-                    this.panelShowFlag = true;
-                    var stu = this.jsondata.filter(item => {
+                if (!this.editUserPanelShowFlag) {
+                    this.editUserPanelShowFlag = true;
+                    var stu = this.userListData.filter(item => {
                         if (item.Name.includes(userID)) {
                             return true;
                         }
@@ -204,7 +381,7 @@
                 }
             },
             editpanelClose: function () {
-                this.panelShowFlag = false;
+                this.editUserPanelShowFlag = false;
                 this.Student = [
                     { editname: '', userID: "", editpwd: "", useraccountNum: "" }
                 ];
@@ -228,6 +405,72 @@
                 } else {
                     alert("请检查输入信息是否完整！")
                 }
+            },
+            rolepanelOpen: function (i) {
+                this.userRoleModel.id = this.userListData[i].ID;
+                this.userRoleModel.name = this.userListData[i].Name;
+                this.userRoleModel.useraccountNum = this.userListData[i].AccountNum;
+                this.userRoleModel.subTime = this.userListData[i].SubTime;
+                //console.log(this.userRoleModel)
+                this.userListPanelShowFlag = this.addUserPanelShowFlag = false;
+                this.userRolePanelShowFlag = true;
+                axios.post(this.roleListApi, {
+                    id: this.userRoleModel.id
+                }).then(res => {
+                    if (res.data != 'no') {
+                        user.roleListData = res.data;
+                    } else {
+                        alert("查无此人");
+                    }
+                    });
+                axios.post(this.noRoleListApi, {
+                    id: this.userRoleModel.id
+                }).then(res => {
+                    if (res.data != 'no') {
+                        user.noRoleListData = res.data;
+                    } else {
+                        alert("查无此人");
+                    }
+                })
+
+            },
+            rolepanelClose: function () {
+                this.userListPanelShowFlag = this.addUserPanelShowFlag = true;
+                this.userRolePanelShowFlag = false;
+                this.userRoleModel = [{
+                    id: "",
+                    name: "",
+                    useraccountNum: ""
+                }];
+            },
+            addRole: function (i) {
+                var roleinfo = this.noRoleListData[i];
+                this.roleListData.push(roleinfo);
+                this.noRoleListData.splice(i, 1);
+            },
+            delRole: function (i) {
+                var roleinfo = this.roleListData[i];
+                this.noRoleListData.push(roleinfo);
+                this.roleListData.splice(i, 1);
+            },
+            userRolePost: function () {
+                var roleIdList = [];
+                for (var i = 0; i < this.roleListData.length; i++) {
+                    roleIdList.push(this.roleListData[i].ID);
+                }
+                roleIdList = JSON.stringify(roleIdList);
+                console.log(roleIdList + "-----" + this.userRoleModel.id);
+                axios.post(this.userRolePostApi, {
+                    idList: roleIdList,
+                    id: this.userRoleModel.id
+                }).then(res => {
+                    if (res.data != "no") {
+                        alert("修改成功");
+                    } else {
+                        alert("修改失败")
+                    }
+                    })
+                this.rolepanelClose();
             }
         },
 

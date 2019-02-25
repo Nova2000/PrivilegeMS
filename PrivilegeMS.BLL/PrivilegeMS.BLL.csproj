@@ -48,6 +48,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
+    <Compile Include="UserInfoService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PrivilegeMS.DALFactory\PrivilegeMS.DALFactory.csproj">

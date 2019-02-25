@@ -12,6 +12,7 @@ namespace PrivilegeMS.WebAPP.Controllers
     {
         IBLL.IRoleInfoService roleInfoService = new BLL.RoleInfoService();
         IBLL.IActionInfoService ActionInfoService = new BLL.ActionInfoService();
+        //解决Json序列化的时候，带有索引属性的对象产生双向引用的BUG
         JsonSerializerSettings setting = new JsonSerializerSettings()
         {
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
@@ -27,11 +28,6 @@ namespace PrivilegeMS.WebAPP.Controllers
         public ActionResult RoleList()
         {
             var role = roleInfoService.LoadEntities(r => r.DelFlag == true);
-            //JsonSerializerSettings setting = new JsonSerializerSettings()
-            //{
-            //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-            //    Formatting = Formatting.None
-            //};
             var ret = JsonConvert.SerializeObject(role, setting);
             return Json(ret, JsonRequestBehavior.AllowGet);
         }
@@ -93,9 +89,21 @@ namespace PrivilegeMS.WebAPP.Controllers
             {
                 var roleInfoAction = (from a in roleinfo.ActionInfo
                                       select a.ID).ToList();
-                var actioninfo = ActionInfoService.LoadEntities(a => a.DelFlag == true && !roleInfoAction.Contains(a.ID));
+                var actioninfo = ActionInfoService.LoadEntities(a => a.DelFlag == true && !roleInfoAction.Contains(a.ID)).Select(a => new
+                {
+                    ID = a.ID,
+                    Name = a.Name,
+                    Url = a.Url,
+                    HttpMethod = a.HttpMethod,
+                    SubTime = a.SubTime,
+                    Remark = a.Remark,
+                    ActionType = a.ActionType,
+                    ModifiedTime = a.ModifiedTime,
+                    Sort = a.Sort
+
+                });
                 var ret = JsonConvert.SerializeObject(actioninfo, setting);
-                return Json(ret, JsonRequestBehavior.AllowGet);
+                return Content(ret);
             }
             return Content("no");
            
@@ -109,9 +117,21 @@ namespace PrivilegeMS.WebAPP.Controllers
             {
                 var roleInfoAction = (from a in roleinfo.ActionInfo
                                       select a.ID).ToList();
-                var actioninfo = ActionInfoService.LoadEntities(a => a.DelFlag == true && roleInfoAction.Contains(a.ID));
+                var actioninfo = ActionInfoService.LoadEntities(a => a.DelFlag == true && roleInfoAction.Contains(a.ID)).Select(a => new
+                {
+                    ID=a.ID,
+                    Name = a.Name,
+                    Url = a.Url,
+                    HttpMethod = a.HttpMethod,
+                    SubTime = a.SubTime,
+                    Remark = a.Remark,
+                    ActionType = a.ActionType,
+                    ModifiedTime = a.ModifiedTime,
+                    Sort = a.Sort
+
+                });
                 var ret = JsonConvert.SerializeObject(actioninfo, setting);
-                return Json(ret, JsonRequestBehavior.AllowGet);
+                return Content(ret);
             }
             return Content("no");
 

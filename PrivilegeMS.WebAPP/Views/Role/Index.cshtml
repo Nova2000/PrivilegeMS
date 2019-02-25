@@ -340,12 +340,12 @@
                 axios.post(this.noActionApiUrl, {
                     id: roleInfo.userRole.id
                 }).then(res => {
-                    roleInfo.noActionData = JSON.parse(res.data);
+                    roleInfo.noActionData = res.data;
                 });
                 axios.post(this.actionApiUrl, {
                     id: roleInfo.userRole.id
                 }).then(res => {
-                    roleInfo.actionData = JSON.parse(res.data);
+                    roleInfo.actionData = res.data;
                     });
 
 
