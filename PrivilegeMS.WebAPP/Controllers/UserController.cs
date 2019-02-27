@@ -11,6 +11,7 @@ namespace PrivilegeMS.WebAPP.Controllers
 {
     public class UserController : Controller
     {
+        IBLL.IRUserInfoActionInfoService rUserInfoActionInfoService = new BLL.RUserInfoActionInfoService();
         IBLL.IActionInfoService actionInfoService = new BLL.ActionInfoService();
         IBLL.IUserInfoService userInfoService = new UserInfoService();
         IBLL.IRoleInfoService roleInfoService = new RoleInfoService();
@@ -146,6 +147,37 @@ namespace PrivilegeMS.WebAPP.Controllers
             return Content("no");
         }
 
+        //展示用户未启用/仅有的权限
+        public ActionResult GetUserWithoutAction(int ID)
+        {
+            var userInfo = userInfoService.LoadEntities(u => u.ID == ID && u.DelFlag == true).FirstOrDefault();
+            if (userInfo!=null)
+            {
+                var userInfoActionInfoList = (from a in userInfo.RUserInfoActionInfo
+                                              select a.ActionInfoID).ToList();
+                if (userInfoActionInfoList!=null)
+                {
+                    var actionInfoList = actionInfoService.LoadEntities(a => a.DelFlag == true && !userInfoActionInfoList.Contains(a.ID)).Select(a => new
+                    {
+                        ID = a.ID,
+                        Name = a.Name,
+                        Url = a.Url,
+                        HttpMethod = a.HttpMethod,
+                        SubTime = a.SubTime,
+                        Remark = a.Remark,
+                        ActionType = a.ActionType,
+                        ModifiedTime = a.ModifiedTime,
+                        Sort = a.Sort
+                    });
+                    if (actionInfoList != null)
+                    {
+                        string jsonTxt = JsonConvert.SerializeObject(actionInfoList, Formatting.Indented);
+                        return Content(jsonTxt);
+                    }
+                }
+            }
+            return Content("no");
+        }
         //展示用户已有权限
         public ActionResult UserAction(int id)
         {
@@ -235,7 +267,19 @@ namespace PrivilegeMS.WebAPP.Controllers
         //为用户清理权限
         public ActionResult DelUserAction(int userID,int actionID)
         {
-            return Content("no");
+            var rUserInfoActionInfo = rUserInfoActionInfoService.LoadEntities(r => r.UserInfoID == userID && r.ActionInfoID == actionID).FirstOrDefault();
+            if (rUserInfoActionInfo!=null)
+            {
+                if (rUserInfoActionInfoService.DeleteEntity(rUserInfoActionInfo))
+                {
+                    return Content("删除成功");
+                }
+                else
+                {
+                    return Content("删除失败");
+                }
+            }
+            return Content("数据不存在");
         }
     }
 }
