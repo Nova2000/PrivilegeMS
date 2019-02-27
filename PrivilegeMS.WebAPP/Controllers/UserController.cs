@@ -11,6 +11,7 @@ namespace PrivilegeMS.WebAPP.Controllers
 {
     public class UserController : Controller
     {
+        IBLL.IActionInfoService actionInfoService = new BLL.ActionInfoService();
         IBLL.IUserInfoService userInfoService = new UserInfoService();
         IBLL.IRoleInfoService roleInfoService = new RoleInfoService();
         //解决Json序列化的时候，带有索引属性的对象产生双向引用的BUG
@@ -31,17 +32,19 @@ namespace PrivilegeMS.WebAPP.Controllers
         [HttpGet]
         public ActionResult UserList()
         {
-            var user = userInfoService.LoadEntities(u => u.DelFlag == true);
-            var ret = JsonConvert.SerializeObject(user, setting);
+            var user = userInfoService.LoadEntities(u => u.DelFlag == true).Select(u => new
+            {
+                ID = u.ID,
+                Name = u.Name,
+                SubTime = u.SubTime,
+                AccountNum = u.AccountNum,
+                Pwd = u.Pwd,
+                ModifiedTime = u.ModifiedTime
+            });
+            var ret = JsonConvert.SerializeObject(user, Formatting.Indented);
             return Content(ret);
         }
-        /// <summary>
-        /// POST 添加用户
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="accountNum"></param>
-        /// <param name="pwd"></param>
-        /// <returns></returns>
+        // POST 添加用户
         [HttpPost]
         public ActionResult AddUser(string name, string accountNum, string pwd)
         {
@@ -140,6 +143,98 @@ namespace PrivilegeMS.WebAPP.Controllers
                     return Content("ok");
                 }
             }
+            return Content("no");
+        }
+
+        //展示用户已有权限
+        public ActionResult UserAction(int id)
+        {
+            var userInfo = userInfoService.LoadEntities(u => u.ID == id && u.DelFlag == true).FirstOrDefault();
+            if (userInfo!=null)
+            {
+                var userInfoActionInfoList = (from a in userInfo.RUserInfoActionInfo
+                                      where a.IsPass == true
+                                      select a.ActionInfoID).ToList();
+                if (userInfoActionInfoList != null)
+                {
+                    var actionInfoList = actionInfoService.LoadEntities(a => a.DelFlag == true&&userInfoActionInfoList.Contains(a.ID)).Select(a => new
+                    {
+                        ID = a.ID,
+                        Name = a.Name,
+                        Url = a.Url,
+                        HttpMethod = a.HttpMethod,
+                        SubTime = a.SubTime,
+                        Remark = a.Remark,
+                        ActionType = a.ActionType,
+                        ModifiedTime = a.ModifiedTime,
+                        Sort = a.Sort
+                    });
+                    if (actionInfoList!=null)
+                    {
+                        string jsonTxt = JsonConvert.SerializeObject(actionInfoList, Formatting.Indented);
+                        return Content(jsonTxt);
+                    }
+
+                }
+            }
+            return Content("no");
+        }
+        //展示用户已禁用权限
+        public ActionResult UserPorhibitAction(int id)
+        {
+            var userInfo = userInfoService.LoadEntities(u => u.ID == id && u.DelFlag == true).FirstOrDefault();
+            if (userInfo != null)
+            {
+                var userInfoActionInfoList = (from a in userInfo.RUserInfoActionInfo
+                                              where a.IsPass == false
+                                              select a.ActionInfoID).ToList();
+                if (userInfoActionInfoList != null)
+                {
+                    var actionInfoList = actionInfoService.LoadEntities(a => a.DelFlag == true && userInfoActionInfoList.Contains(a.ID)).Select(a => new
+                    {
+                        ID = a.ID,
+                        Name = a.Name,
+                        Url = a.Url,
+                        HttpMethod = a.HttpMethod,
+                        SubTime = a.SubTime,
+                        Remark = a.Remark,
+                        ActionType = a.ActionType,
+                        ModifiedTime = a.ModifiedTime,
+                        Sort = a.Sort
+                    });
+                    if (actionInfoList != null)
+                    {
+                        string jsonTxt = JsonConvert.SerializeObject(actionInfoList, Formatting.Indented);
+                        return Content(jsonTxt);
+                    }
+
+                }
+            }
+            return Content("no");
+        }
+        //为用户添加/禁用权限
+        public ActionResult EditUserAction(int userID,int actionID,bool isPass)
+        {
+            if (userInfoService.SetUserActionInfo(actionID,userID, isPass))
+            {
+                if (isPass)
+                {
+                    return Content("启用成功");
+                }
+                else
+                {
+                    return Content("禁用成功");
+                }
+            }
+            else
+            {
+                return Content("修改失败");
+            }
+        }
+        
+        //为用户清理权限
+        public ActionResult DelUserAction(int userID,int actionID)
+        {
             return Content("no");
         }
     }

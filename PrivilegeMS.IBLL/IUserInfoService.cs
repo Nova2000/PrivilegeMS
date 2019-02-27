@@ -35,5 +35,6 @@ namespace PrivilegeMS.IBLL
     public partial interface  IUserInfoService:IBaseService<UserInfo>
     {
         bool SetUserRoleInfo(int userId, List<int> roleIdList);
+        bool SetUserActionInfo(int actionId,int  userId, bool isPass);
     }
 }

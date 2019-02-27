@@ -31,20 +31,22 @@
                                     <th>账号</th>
                                     <th>密码</th>
                                     <th>注册时间</th>
+                                    @*<th>修改时间</th>*@
                                     <th>操作</th>
                                 </tr>
                             </thead>
                             <!-- :class="{'trs':i%2==0}" -->
                             <tbody>
                                 <tr v-for="(item,i) in userListData" :key="i" :class="{'trs':i%2==0}">
-                                    <td v-text="i+1"></td>
+                                    <td v-text="item.ID"></td>
                                     <td v-text="item.Name"></td>
                                     <td v-text="item.AccountNum">123456789</td>
                                     <td v-text="item.Pwd">123456789</td>
                                     <td>{{item.SubTime | timeFormat('en')}}</td>
+                                    @*<td>{{item.ModifiedTime | timeFormat('en')}}</td>*@
                                     <td>
                                         <a class="btn btn-default btn-sm" v-on:click="editpanelOpen(item.Name)" v-show="editBtnFlag">修改</a>
-                                        <a class="btn btn-info btn-sm" v-on:click="" v-show="actionBtnFlag">权限</a>
+                                        <a class="btn btn-info btn-sm" v-on:click="actionpanelOpen(i)" v-show="actionBtnFlag">权限</a>
                                         <a class="btn btn-success btn-sm" v-on:click="rolepanelOpen(i)" v-show="roleBtnFlag">角色</a>
                                         <a class=" btn btn-danger btn-sm" v-on:click="deluser(i,item.ID)" v-show="deleteBtnFlag">删除</a>
 
@@ -135,7 +137,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="(item,i) in roleListData" :key="i">
-                                <td v-text="i+1">序号</td>
+                                <td v-text="item.ID">序号</td>
                                 <td v-text="item.Name">名称</td>
                                 <td>{{item.SubTime | timeFormat('en')}}</td>
                                 <td v-text="item.Sort">简介</td>
@@ -160,7 +162,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="(item,i) in noRoleListData" :key="i" :class="{'trs':i%2==0}">
-                                <td v-text="i+1">序号</td>
+                                <td v-text="item.ID">序号</td>
                                 <td v-text="item.Name">名称</td>
                                 <td>{{item.SubTime | timeFormat('en')}}</td>
                                 <td v-text="item.Sort">简介</td>
@@ -184,17 +186,20 @@
         <div class="col-lg-10 col-lg-offset-1 animated fadeIn " v-show="userActionPanelShowFlag">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h3>角色权限</h3>
+                    <h3>用户信息</h3>
                     <div class="container">
-                        <div class="col-lg-3"><strong>角色名称：</strong>@*{{userRole["name"]}}*@</div>
-                        <div class="col-lg-3"><strong>注册时间：</strong>@*{{userRole.subTime| timeFormat('en')}}*@</div>
-                        <div class="col-lg-3"><strong>简介：</strong>@*{{userRole.remark}}*@</div>
+                        <div class="col-lg-3"><strong>ID：</strong>{{userRoleModel.id}}</div>
+                        <div class="col-lg-3"><strong>账户：</strong>{{userRoleModel.useraccountNum}}</div>
+                        <div class="col-lg-3"><strong>用户名：</strong>{{userRoleModel["name"]}}</div>
+                        @*<div class="col-lg-3"><strong>注册时间：</strong>{{userRoleModel.subTime | timeFormat('en')}}</div>*@
+
 
                     </div>
                 </div>
                 <div class="panel-body">
+                    <!--单独拥有权限-->
                     <table class="table  table-hover table-bordered">
-                        <caption class="text-center"><h4>已有权限</h4></caption>
+                        <caption class="text-center"><h4>单独拥有权限</h4></caption>
                         <thead>
                             <tr class="info">
                                 <th>序号</th>
@@ -208,8 +213,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(item,i) in userListData" :key="i">
-                                <td v-text="i+1"></td>
+                            <tr v-for="(item,i) in actionListData" :key="i">
+                                <td v-text="item.ID"></td>
                                 <td v-text="item.Name"></td>
                                 <td>{{item.SubTime | timeFormat('en')}}</td>
                                 <td v-text="item.Url" class="text-left"></td>
@@ -217,13 +222,15 @@
                                 <td v-text="item.ActionType==0?'非菜单权限':'菜单权限'"></td>
                                 <td v-text="item.Remark">简介</td>
                                 <td>
-                                    <a class=" btn btn-danger btn-sm" v-on:click="roleActionDel(i)">禁用</a>
+                                    <a class=" btn btn-danger btn-sm" v-on:click="prohibitUserAction(item.ID)">禁用</a>
+                                    <a class=" btn btn-warning btn-sm" v-on:click="">清理</a>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+                    <!--禁用权限-->
                     <table class="table  table-hover table-bordered">
-                        <caption class="text-center"><h4>未分配权限</h4></caption>
+                        <caption class="text-center"><h4>禁用权限</h4></caption>
                         <thead>
                             <tr class="info">
                                 <th>序号</th>
@@ -237,8 +244,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(item,i) in userListData" :key="i" :class="{'trs':i%2==0}">
-                                <td v-text="i+1"></td>
+                            <tr v-for="(item,i) in porhibitActionListData" :key="i" :class="{'trs':i%2==0}">
+                                <td v-text="item.ID"></td>
                                 <td v-text="item.Name"></td>
                                 <td>{{item.SubTime | timeFormat('en')}}</td>
                                 <td v-text="item.Url" class="text-left"></td>
@@ -246,13 +253,47 @@
                                 <td v-text="item.ActionType==0?'非菜单权限':'菜单权限'"></td>
                                 <td v-text="item.Remark">简介</td>
                                 <td>
-                                    <a class=" btn btn-success btn-sm" v-on:click="">启用</a>
+                                    <a class=" btn btn-success btn-sm" v-on:click="addUserAction(item.ID)">启用</a>
+                                    <a class=" btn btn-warning btn-sm" v-on:click="">清理</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <!--所有权限-->
+                    <table class="table  table-hover table-bordered">
+                        <caption class="text-center"><h4>所有权限</h4></caption>
+                        <thead>
+                            <tr class="info">
+                                <th>序号</th>
+                                <th>名称</th>
+                                <th>创建时间</th>
+                                <th>URL</th>
+                                <th>请求方式</th>
+                                <th>属性</th>
+                                <th>简介</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(item,i) in allActionListData" :key="i" :class="{'trs':i%2==0}">
+                                <td v-text="item.ID"></td>
+                                <td v-text="item.Name"></td>
+                                <td>{{item.SubTime | timeFormat('en')}}</td>
+                                <td v-text="item.Url" class="text-left"></td>
+                                <td v-text="item.HttpMethod"></td>
+                                <td v-text="item.ActionType==0?'非菜单权限':'菜单权限'"></td>
+                                <td v-text="item.Remark">简介</td>
+                                <td>
+                                    <a class=" btn btn-success btn-sm" v-on:click="addUserAction(item.ID)">启用</a>
+                                    <a class=" btn btn-warning btn-sm" v-on:click="prohibitUserAction(item.ID)">禁用</a>
+
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                     <div class="col-lg-4 pull-left">
-                        <button class="btn btn-default btn-block " v-on:click="">取消</button>
+                        <button class="btn btn-default btn-block " v-on:click="actionpanelClose">取消</button>
                     </div>
                     <div class="col-lg-4 pull-right">
                         <button class="btn btn-success btn-block" v-on:click="">提交</button>
@@ -300,7 +341,7 @@
                 id:"",
                 name: "",
                 useraccountNum: "",
-                subTime:'/Date(1544803612683)/'
+                subTime:''
             }],
             //用户角色列表
             roleListApi:'/User/GetUsetRoleList',
@@ -309,14 +350,19 @@
             noRoleListData: [],
             userRolePostApi:'/User/EditUserRole',
             //权限列表
-            actionListApi:'',
+            actionListApi:'/User/UserAction',
             actionListData: [],
-            noActionLsitApi:'',
-            noActionListData:[],
+            porhibitActionLsitApi:'/User/UserPorhibitAction',
+            porhibitActionListData: [],
+            allActionListApi: '/Action/GetAllActionList',
+            allActionListData: [],
+            //权限操作
+            editUserActionApi: '/User/EditUserAction',
            
         },
         methods: {
-            getRequest: function () {
+            //获取用户列表
+            getUserListData: function () {
                 //this.$http.get(this.apiUrl).then(function (res) {
                 //    this.userListData = res.body;
                 //})
@@ -324,10 +370,7 @@
                     user.userListData = res.data;
                 })
             },
-            timeFormat: function (time) {
-                var times = new Date(time);
-                return times;
-            },
+            //添加用户
             adduser: function () {
                 if (this.accountNum.length == 9 && this.pwd.length > 0 && this.name.length > 0) {
                     axios.post(this.addUserApiUrl, {
@@ -337,7 +380,7 @@
                     }).then(function (respose) {
                         if (respose.data == "ok") {
                             user.accountNum = user.pwd = user.name = '';
-                            user.getRequest();
+                            user.getUserListData();
 
                         } else {
                             alert("添加失败")
@@ -348,6 +391,7 @@
                 }
 
             },
+            //删除用户
             deluser: function (i, itemId) {
                 //alert(id);
                 var flag = confirm("确认删除序号为 " + (i + 1) + " 的记录吗？")
@@ -356,7 +400,7 @@
                         id: itemId
                     }).then(function (respose) {
                         if (respose.data == 'ok') {
-                            user.getRequest();
+                            user.getUserListData();
 
                         } else {
                             alert("删除失败")
@@ -364,6 +408,7 @@
                     })
                 }
             },
+            //打开修改面板
             editpanelOpen: function (userID) {
                 if (!this.editUserPanelShowFlag) {
                     this.editUserPanelShowFlag = true;
@@ -380,12 +425,14 @@
                     alert("请修改或关闭当前用户数据!");
                 }
             },
+            //关闭修改用户面板
             editpanelClose: function () {
                 this.editUserPanelShowFlag = false;
                 this.Student = [
                     { editname: '', userID: "", editpwd: "", useraccountNum: "" }
                 ];
             },
+            //修改用户
             edituser: function () {
                 if (this.Student.editname != "" && this.Student.userID != "" && this.Student.editpwd != "" && this.Student.useraccountNum != "") {
                     axios.post(this.editUserApiUrl, {
@@ -396,7 +443,7 @@
                         if (respose.data == "ok") {
                             alert("修改成功！");
                             user.editpanelClose();
-                            user.getRequest();
+                            user.getUserListData();
 
                         } else {
                             alert("修改失败")
@@ -406,6 +453,7 @@
                     alert("请检查输入信息是否完整！")
                 }
             },
+            //打开角色面板
             rolepanelOpen: function (i) {
                 this.userRoleModel.id = this.userListData[i].ID;
                 this.userRoleModel.name = this.userListData[i].Name;
@@ -434,25 +482,30 @@
                 })
 
             },
+            //关闭角色面板
             rolepanelClose: function () {
                 this.userListPanelShowFlag = this.addUserPanelShowFlag = true;
                 this.userRolePanelShowFlag = false;
                 this.userRoleModel = [{
                     id: "",
                     name: "",
-                    useraccountNum: ""
+                    useraccountNum: "",
+                    subTime: ''
                 }];
             },
+            //添加角色
             addRole: function (i) {
                 var roleinfo = this.noRoleListData[i];
                 this.roleListData.push(roleinfo);
                 this.noRoleListData.splice(i, 1);
             },
+            //删除角色
             delRole: function (i) {
                 var roleinfo = this.roleListData[i];
                 this.noRoleListData.push(roleinfo);
                 this.roleListData.splice(i, 1);
             },
+            //提交角色修改记录
             userRolePost: function () {
                 var roleIdList = [];
                 for (var i = 0; i < this.roleListData.length; i++) {
@@ -471,34 +524,120 @@
                     }
                     })
                 this.rolepanelClose();
+            },
+
+            //
+            //获取用户权限
+            //
+
+            //获取已有权限
+            getUserActionData: function (ID) {
+                axios.post(this.actionListApi, {
+                    id: ID
+                }).then(res => {
+                    user.actionListData = res.data;
+                })
+            },
+            //获取所有权限
+            getAllActionData: function () {
+                axios.get(this.allActionListApi).then(res => {
+                    if (res.data != "no") {
+                        user.allActionListData = res.data;
+                    } else {
+                        alert("查询出错")
+                    }
+                });
+            },
+            //获取禁用权限
+            getUserPorhibitActionData: function (ID) {
+                axios.post(this.porhibitActionLsitApi, {
+                    id: ID
+                }).then(res => {
+                    user.porhibitActionListData = res.data;
+                })
+            },
+            //打开权限面板
+            actionpanelOpen: function (i) {
+                this.userRoleModel.id = this.userListData[i].ID;
+                this.userRoleModel.name = this.userListData[i].Name;
+                this.userRoleModel.useraccountNum = this.userListData[i].AccountNum;
+                this.userRoleModel.subTime = this.userListData[i].SubTime;
+                this.userActionPanelShowFlag = true;
+                this.userListPanelShowFlag = this.addUserPanelShowFlag = false;
+                //console.log(this.userRoleModel)
+                this.getAllActionData();
+                this.getUserActionData(this.userRoleModel.id);
+                this.getUserPorhibitActionData(this.userRoleModel.id);
+            },
+            //关闭权限面板
+            actionpanelClose: function () {
+                this.userRoleModel = [{
+                    id: "",
+                    name: "",
+                    useraccountNum: "",
+                    subTime: ''
+                }];
+                this.userActionPanelShowFlag = false;
+                this.userListPanelShowFlag = this.addUserPanelShowFlag = true;
+                //console.log(this.userRoleModel)
+            },
+            //添加权限
+            addUserAction: function (ID) {                                
+                axios.post(this.editUserActionApi, {
+                    userID: this.userRoleModel.id,
+                    actionID: ID,
+                    isPass: true
+                }).then(res => {
+                    user.getUserActionData(this.userRoleModel.id);
+                    user.getUserPorhibitActionData(this.userRoleModel.id);
+                    alert(res.data)
+                });
+               
+            },
+            //禁用权限
+            prohibitUserAction: function (ID) {
+                axios.post(this.editUserActionApi, {
+                    userID: this.userRoleModel.id,
+                    actionID: ID,
+                    isPass: false
+                }).then(res => {
+                    user.getUserActionData(this.userRoleModel.id);
+                    user.getUserPorhibitActionData(this.userRoleModel.id);
+                    alert(res.data)
+                    });
+               
             }
         },
 
         created() {
-            this.getRequest();
+            this.getUserListData();
         },
         filters: {
             timeFormat: function (dateStr, pattern) {
-                var t = dateStr.slice(6, 19)
-                var date = new Date(parseInt(t));
-                var year = date.getFullYear();
-                var month = date.getMonth() + 1;
-                var day = date.getDate();
-                var result = '';
-                if (pattern) {
-                    switch (pattern.toLowerCase()) {
-                        case 'cn':
-                            result = year + '年' + month + '月' + day + '日';
-                            break;
-                        case 'en':
-                            result = year + '-' + month + '-' + day;
-                            break;
-                        default:
-                            result = year + '.' + month + '.' + day;
-                            break;
+                try {
+                    var t = dateStr.slice(6, 19)
+                    var date = new Date(parseInt(t));
+                    var year = date.getFullYear();
+                    var month = date.getMonth() + 1;
+                    var day = date.getDate();
+                    var result = '';
+                    if (pattern) {
+                        switch (pattern.toLowerCase()) {
+                            case 'cn':
+                                result = year + '年' + month + '月' + day + '日';
+                                break;
+                            case 'en':
+                                result = year + '-' + month + '-' + day;
+                                break;
+                            default:
+                                result = year + '.' + month + '.' + day;
+                                break;
+                        }
+                    } else {
+                        result = year + '.' + month + '.' + day;
                     }
-                } else {
-                    result = year + '.' + month + '.' + day;
+                } catch (e) {
+                    result="null"
                 }
                 return result;
             }
