@@ -103,6 +103,7 @@ namespace PrivilegeMS.WebAPP.Controllers
             return Content("no");
         }
         //获取已有角色身份
+        [HttpPost]
         public ActionResult GetUsetRoleList(int id)
         {
             var userinfo = userInfoService.LoadEntities(u => u.ID == id && u.DelFlag == true).FirstOrDefault();
@@ -116,6 +117,7 @@ namespace PrivilegeMS.WebAPP.Controllers
             return Content("no");
         }
         //获取未有角色身份
+        [HttpPost]
         public ActionResult GetUsetOutsideRoleList(int id)
         {
             var userinfo = userInfoService.LoadEntities(u => u.ID == id && u.DelFlag == true).FirstOrDefault();
@@ -129,6 +131,7 @@ namespace PrivilegeMS.WebAPP.Controllers
             return Content("no");
         }
         //修改用户角色身份
+        [HttpPost]
         public ActionResult EditUserRole(string idList,int id)
         {
             string[] IdListS = idList.Substring(1, idList.Length - 2).Split(',');
@@ -148,6 +151,7 @@ namespace PrivilegeMS.WebAPP.Controllers
         }
 
         //展示用户未启用/仅有的权限
+        [HttpPost]
         public ActionResult GetUserWithoutAction(int ID)
         {
             var userInfo = userInfoService.LoadEntities(u => u.ID == ID && u.DelFlag == true).FirstOrDefault();
@@ -179,6 +183,7 @@ namespace PrivilegeMS.WebAPP.Controllers
             return Content("no");
         }
         //展示用户已有权限
+        [HttpPost]
         public ActionResult UserAction(int id)
         {
             var userInfo = userInfoService.LoadEntities(u => u.ID == id && u.DelFlag == true).FirstOrDefault();
@@ -212,6 +217,7 @@ namespace PrivilegeMS.WebAPP.Controllers
             return Content("no");
         }
         //展示用户已禁用权限
+        [HttpPost]
         public ActionResult UserPorhibitAction(int id)
         {
             var userInfo = userInfoService.LoadEntities(u => u.ID == id && u.DelFlag == true).FirstOrDefault();
@@ -245,6 +251,7 @@ namespace PrivilegeMS.WebAPP.Controllers
             return Content("no");
         }
         //为用户添加/禁用权限
+        [HttpPost]
         public ActionResult EditUserAction(int userID,int actionID,bool isPass)
         {
             if (userInfoService.SetUserActionInfo(actionID,userID, isPass))
@@ -265,6 +272,7 @@ namespace PrivilegeMS.WebAPP.Controllers
         }
         
         //为用户清理权限
+        [HttpPost]
         public ActionResult DelUserAction(int userID,int actionID)
         {
             var rUserInfoActionInfo = rUserInfoActionInfoService.LoadEntities(r => r.UserInfoID == userID && r.ActionInfoID == actionID).FirstOrDefault();

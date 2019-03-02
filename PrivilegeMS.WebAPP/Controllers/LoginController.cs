@@ -18,7 +18,7 @@ namespace PrivilegeMS.WebAPP.Controllers
         {
             string account = Request["Name"];
             string pwd = Request["Pwd"];
-            var userID = UserInfoService.LoadEntities(u => u.AccountNum == account && u.Pwd == pwd).Select(u=>u.ID).FirstOrDefault();
+            var userID = UserInfoService.LoadEntities(u => u.AccountNum == account && u.Pwd == pwd &&u.DelFlag==true).Select(u=>u.ID).FirstOrDefault();
 
             if (userID !=0)
             {

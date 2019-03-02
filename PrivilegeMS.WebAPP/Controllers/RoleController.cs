@@ -89,6 +89,7 @@ namespace PrivilegeMS.WebAPP.Controllers
             return Content("no");
         }
         //获取角色未分配权限
+        [HttpPost]
         public ActionResult NoActioninfo(int id)
         {
             //int id = int.Parse(Request["id"]);
@@ -117,6 +118,7 @@ namespace PrivilegeMS.WebAPP.Controllers
            
         }
         //获取角色已有权限
+        [HttpPost]
         public ActionResult Actioninfo(int id)
         {
             //int id = int.Parse(Request["id"]);
@@ -145,6 +147,7 @@ namespace PrivilegeMS.WebAPP.Controllers
 
         }
         //设置角色权限
+        [HttpPost]
         public ActionResult SetRoleAction(int id,string idList)
         {
             string[] IdListS = idList.Substring(1, idList.Length - 2).Split(',');
