@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace PrivilegeMS.WebAPP.Controllers
 {
-    public class ActionController : Controller
+    public class ActionController : BaseController
     {
         IBLL.IActionInfoService actionInfoService = new BLL.ActionInfoService();
         // GET: Action

@@ -234,7 +234,7 @@
             //获取角色列表
             getRequest: function () {
                 axios.get(this.roleListApiUrl).then(function (res) {
-                    roleInfo.jsondata = JSON.parse(res.data)
+                    roleInfo.jsondata = res.data;
                 })
             },
             //添加角色

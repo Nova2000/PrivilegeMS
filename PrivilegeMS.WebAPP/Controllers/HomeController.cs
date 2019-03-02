@@ -9,7 +9,7 @@ using PrivilegeMS.Model;
 
 namespace PrivilegeMS.WebAPP.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         IBLL.IUserInfoService userInfoService = new UserInfoService();
         // GET: Home

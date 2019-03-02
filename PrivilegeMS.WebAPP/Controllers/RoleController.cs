@@ -8,7 +8,7 @@ using PrivilegeMS.BLL;
 using Newtonsoft.Json;
 namespace PrivilegeMS.WebAPP.Controllers
 {
-    public class RoleController : Controller
+    public class RoleController : BaseController
     {
         IBLL.IRoleInfoService roleInfoService = new BLL.RoleInfoService();
         IBLL.IActionInfoService ActionInfoService = new BLL.ActionInfoService();
@@ -27,9 +27,17 @@ namespace PrivilegeMS.WebAPP.Controllers
         [HttpGet]
         public ActionResult RoleList()
         {
-            var role = roleInfoService.LoadEntities(r => r.DelFlag == true);
-            var ret = JsonConvert.SerializeObject(role, setting);
-            return Json(ret, JsonRequestBehavior.AllowGet);
+            var role = roleInfoService.LoadEntities(r => r.DelFlag == true).Select(r => new
+            {
+                ID = r.ID,
+                Name = r.Name,
+                SubTime = r.SubTime,
+                ModifiedTime = r.ModifiedTime,
+                Remark = r.Remark,
+                Sort = r.Sort
+            });
+            var ret = JsonConvert.SerializeObject(role, Formatting.Indented);
+            return Content(ret);
         }
         [HttpPost]
         public ActionResult AddRole(string name,string remark,int sort)

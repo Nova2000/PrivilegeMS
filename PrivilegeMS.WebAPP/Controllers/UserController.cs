@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace PrivilegeMS.WebAPP.Controllers
 {
-    public class UserController : Controller
+    public class UserController : BaseController//Controller
     {
         IBLL.IRUserInfoActionInfoService rUserInfoActionInfoService = new BLL.RUserInfoActionInfoService();
         IBLL.IActionInfoService actionInfoService = new BLL.ActionInfoService();
