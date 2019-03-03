@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Newtonsoft.Json;
 
 namespace PrivilegeMS.WebAPP.Controllers
 {
@@ -22,7 +23,11 @@ namespace PrivilegeMS.WebAPP.Controllers
                 //获取请求方式和请求地址
                 string url = Request.Url.AbsolutePath.ToUpper();
                 string httpMehotd = Request.HttpMethod.ToUpper();
-
+                if (url== "/")
+                {
+                    filterContext.Result = Redirect("/home/index");
+                    return;
+                }
                 //1.【用户--权限】
                 var actionInfo = actionInfoService.LoadEntities(a => a.Url.ToUpper() == url && a.HttpMethod.ToUpper() == httpMehotd).FirstOrDefault();
                         //获取登录用户
@@ -39,7 +44,8 @@ namespace PrivilegeMS.WebAPP.Controllers
                     }
                     else
                     {
-                        filterContext.Result = JavaScript("<script>alert('您未拥有 " + actionInfo.Name + "  权限')</script>");
+                        string jsontxt = Common.JsonHelper.ResposeJson(403, null, "您未拥有 " + actionInfo.Name + "  权限");
+                        filterContext.Result = Content(jsontxt);
                         return;
                     }
                 }
@@ -52,8 +58,8 @@ namespace PrivilegeMS.WebAPP.Controllers
                              select a).Count();
                 if (count<1)
                 {
-                    filterContext.Result = JavaScript("<script>alert('您未拥有 " + actionInfo.Name + "  权限')</script>");
-                    //filterContext.Result = Redirect("/Error.html");
+                    string jsontxt = Common.JsonHelper.ResposeJson(403, null, "您未拥有 " + actionInfo.Name + "  权限");
+                    filterContext.Result = Content(jsontxt);
                     return;
                 }
 

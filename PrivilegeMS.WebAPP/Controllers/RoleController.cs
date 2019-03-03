@@ -37,11 +37,13 @@ namespace PrivilegeMS.WebAPP.Controllers
                 Sort = r.Sort
             });
             var ret = JsonConvert.SerializeObject(role, Formatting.Indented);
-            return Content(ret);
+            string jsondata = Common.JsonHelper.ResposeJson(200, ret, "ok");
+            return Content(jsondata);
         }
         [HttpPost]
         public ActionResult AddRole(string name,string remark,int sort)
         {
+            string jsondata;
             Model.RoleInfo roleInfo = new Model.RoleInfo();
             roleInfo.Remark = remark;
             roleInfo.Sort = sort;
@@ -51,13 +53,16 @@ namespace PrivilegeMS.WebAPP.Controllers
             var role = roleInfoService.AddEntity(roleInfo);
             if (role.ID!=0&&role!=null)
             {
-                return Content("ok");
+                jsondata = Common.JsonHelper.ResposeJson(200,null, "ok");
+                return Content(jsondata);
             }
-            return Content("no");
+            jsondata = Common.JsonHelper.ResposeJson(404, null, "添加失败");
+            return Content(jsondata);
         }
         [HttpPost]
         public ActionResult DeleteRole(int id)
         {
+            string jsondata;
             var roleinfo = roleInfoService.LoadEntities(r => r.ID == id && r.DelFlag == true).FirstOrDefault();
             if (roleinfo!=null)
             {
@@ -65,14 +70,17 @@ namespace PrivilegeMS.WebAPP.Controllers
                 var flag = roleInfoService.EditEntity(roleinfo);
                 if (flag)
                 {
-                    return Content("ok");
+                    jsondata = Common.JsonHelper.ResposeJson(200, null, "删除成功");
+                    return Content(jsondata);
                 }
             }
-            return Content("no");
+            jsondata = Common.JsonHelper.ResposeJson(404, null, "删除失败");
+            return Content(jsondata);
         }
         [HttpPost]
         public ActionResult EditRole(string name,string remark,int id,int sort)
         {
+            string jsondata;
             var roleInfo = roleInfoService.LoadEntities(r => r.ID == id && r.DelFlag == true).FirstOrDefault();
             if (roleInfo!=null)
             {
@@ -83,15 +91,18 @@ namespace PrivilegeMS.WebAPP.Controllers
                 var flag = roleInfoService.EditEntity(roleInfo);
                 if (flag)
                 {
-                    return Content("ok");
+                    jsondata = Common.JsonHelper.ResposeJson(200, null, "修改成功");
+                    return Content(jsondata);
                 }
             }
-            return Content("no");
+            jsondata = Common.JsonHelper.ResposeJson(404, null, "修改失败");
+            return Content(jsondata);
         }
         //获取角色未分配权限
         [HttpPost]
         public ActionResult NoActioninfo(int id)
         {
+            string jsondata;
             //int id = int.Parse(Request["id"]);
             var roleinfo = roleInfoService.LoadEntities(r => r.ID == id && r.DelFlag == true).FirstOrDefault();
             if (roleinfo != null)
@@ -112,15 +123,18 @@ namespace PrivilegeMS.WebAPP.Controllers
 
                 });
                 var ret = JsonConvert.SerializeObject(actioninfo, setting);
-                return Content(ret);
+                jsondata = Common.JsonHelper.ResposeJson(200, ret, "ok");
+                return Content(jsondata);
             }
-            return Content("no");
+            jsondata = Common.JsonHelper.ResposeJson(404, null, "获取失败");
+            return Content(jsondata);
            
         }
         //获取角色已有权限
         [HttpPost]
         public ActionResult Actioninfo(int id)
         {
+            string jsondata;
             //int id = int.Parse(Request["id"]);
             var roleinfo = roleInfoService.LoadEntities(r => r.ID == id && r.DelFlag == true).FirstOrDefault();
             if (roleinfo != null)
@@ -141,15 +155,18 @@ namespace PrivilegeMS.WebAPP.Controllers
 
                 });
                 var ret = JsonConvert.SerializeObject(actioninfo, setting);
-                return Content(ret);
+                jsondata = Common.JsonHelper.ResposeJson(200, ret, "ok");
+                return Content(jsondata);
             }
-            return Content("no");
+            jsondata = Common.JsonHelper.ResposeJson(404, null, "获取信息失败");
+            return Content(jsondata);
 
         }
         //设置角色权限
         [HttpPost]
         public ActionResult SetRoleAction(int id,string idList)
         {
+            string jsondata;
             string[] IdListS = idList.Substring(1, idList.Length - 2).Split(',');
             List<int> IdList = new List<int>();
             foreach (var item in IdListS)
@@ -158,9 +175,11 @@ namespace PrivilegeMS.WebAPP.Controllers
             }
             if (roleInfoService.SetRoleActionInfo(id,IdList))
             {
-                return Content("ok");
+                jsondata = Common.JsonHelper.ResposeJson(200, null, "设置成功");
+                return Content(jsondata);
             }
-            return Content("no");
+            jsondata = Common.JsonHelper.ResposeJson(404, null, "设置失败");
+            return Content(jsondata);
         }
     }
 }

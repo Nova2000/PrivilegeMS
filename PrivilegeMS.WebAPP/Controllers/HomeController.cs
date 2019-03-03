@@ -61,7 +61,13 @@ namespace PrivilegeMS.WebAPP.Controllers
                     Name = a.Name,
                     Url = a.Url
                 });
-                string jsontxt = JsonConvert.SerializeObject(lastActionInfo, Formatting.Indented);
+                string datatxt = JsonConvert.SerializeObject(lastActionInfo, Formatting.Indented);
+                string jsontxt = JsonConvert.SerializeObject(new
+                {
+                    status = 200,
+                    data = datatxt,
+                    msg = "ok"
+                });
                 return Content(jsontxt);
             }
             return Content("no");

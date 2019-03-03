@@ -164,6 +164,10 @@
       <Project>{e3f5ce69-89e7-4577-a21f-4a518e8e5bd6}</Project>
       <Name>PrivilegeMS.BLL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PrivilegeMS.Common\PrivilegeMS.Common.csproj">
+      <Project>{0c00f15c-4f57-4b85-b424-789650fb2520}</Project>
+      <Name>PrivilegeMS.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PrivilegeMS.IBLL\PrivilegeMS.IBLL.csproj">
       <Project>{0ac9da52-d1ed-4189-aa3a-f872c5ba65b4}</Project>
       <Name>PrivilegeMS.IBLL</Name>

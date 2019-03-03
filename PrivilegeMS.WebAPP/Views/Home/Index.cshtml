@@ -16,8 +16,9 @@
         li {
             margin: 10px 0;
         }
-        ul{
-            padding:0;
+
+        ul {
+            padding: 0;
         }
     </style>
 </head>
@@ -29,12 +30,6 @@
                     <h2>权限管理系统</h2>
                 </div>
                 <div class="panel panel-body" id="menu">
-                    @*<ul class="">
-                        <li><a class="btn btn-info btn-block" href="/user/index">用户管理</a></li>
-                        <li><a class="btn btn-warning btn-block" href="/role/index">身份管理</a></li>
-                        <li><a class="btn btn-success btn-block">权限管理</a></li>
-                        <li><a class="btn btn-danger btn-block">1管理</a></li>
-                    </ul>*@
                     <ul>
                         <li v-for="(item,i) in menuData" :key="i">
                             <a :href="item.Url" @*class="btn btn-block"*@ :class=" classData[i%6].Name">{{item.Name}}</a>
@@ -49,13 +44,17 @@
 
     </div>
 </body>
+
+
+</html>
+
 <script src="~/Scripts/axios.min.js"></script>
 <script src="~/Scripts/vue.min.js"></script>
 <script>
     var menu = new Vue({
         el: "#menu",
         data: {
-            menuApi:"/Home/GetMenus",
+            menuApi: "/Home/GetMenus",
             menuData: [],
             classData: [
                 {
@@ -82,8 +81,11 @@
         methods: {
             getMenuData: function () {
                 axios.get(this.menuApi).then(res => {
-                    if (res.data != 'no') {
-                        menu.menuData = res.data;
+                    if (res.data.status == 200) {
+                        menu.menuData = JSON.parse(res.data.data);
+                    } else {
+                        menu.menuData = [];
+                        alert(res.data.msg);
                     }
                 })
             }
@@ -93,7 +95,3 @@
         }
     })
 </script>
-
-
-</html>
-

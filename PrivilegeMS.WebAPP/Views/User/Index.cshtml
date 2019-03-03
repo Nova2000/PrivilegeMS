@@ -298,8 +298,8 @@
 
     </div>
     <a class="btn btn-default btn-block" href="/home/index"> 返回首页</a>
-    
 </body>
+</html>
 <script>
     var user = new Vue({
         el: "#user",
@@ -332,27 +332,27 @@
             ],
             //用户角色
             userRoleModel: [{
-                id:"",
+                id: "",
                 name: "",
                 useraccountNum: "",
-                subTime:''
+                subTime: ''
             }],
             //用户角色列表
-            roleListApi:'/User/GetUsetRoleList',
+            roleListApi: '/User/GetUsetRoleList',
             roleListData: [],
             noRoleListApi: '/User/GetUsetOutsideRoleList',
             noRoleListData: [],
-            userRolePostApi:'/User/EditUserRole',
+            userRolePostApi: '/User/EditUserRole',
             //权限列表
-            actionListApi:'/User/UserAction',
+            actionListApi: '/User/UserAction',
             actionListData: [],
-            porhibitActionLsitApi:'/User/UserPorhibitAction',
+            porhibitActionLsitApi: '/User/UserPorhibitAction',
             porhibitActionListData: [],
             allActionListApi: '/User/GetUserWithoutAction',
             allActionListData: [],
             //权限操作
             editUserActionApi: '/User/EditUserAction',
-            delUserActionApi:'/User/DelUserAction'
+            delUserActionApi: '/User/DelUserAction'
         },
         methods: {
             //获取用户列表
@@ -361,7 +361,13 @@
                 //    this.userListData = res.body;
                 //})
                 axios.get(this.userListApiUrl).then(function (res) {
-                    user.userListData = res.data;
+                    if (res.data.status == 200) {
+                        user.userListData = JSON.parse(res.data.data);
+                    } else {
+                        user.userListData = [];
+                        alert(res.data.msg);
+                    }
+
                 })
             },
             //添加用户
@@ -372,12 +378,12 @@
                         accountNum: this.accountNum,
                         pwd: this.pwd
                     }).then(function (respose) {
-                        if (respose.data == "ok") {
+                        if (respose.data.status == 200) {
                             user.accountNum = user.pwd = user.name = '';
                             user.getUserListData();
 
                         } else {
-                            alert("添加失败")
+                            alert(respose.data.msg);
                         }
                     })
                 } else {
@@ -393,11 +399,11 @@
                     axios.post(this.deleteApiUrl, {
                         id: itemId
                     }).then(function (respose) {
-                        if (respose.data == 'ok') {
+                        if (respose.data.status == 200) {
                             user.getUserListData();
 
                         } else {
-                            alert("删除失败")
+                            alert(respose.data.msg);
                         }
                     })
                 }
@@ -434,13 +440,13 @@
                         name: this.Student.editname,
                         pwd: this.Student.editpwd
                     }).then(respose => {
-                        if (respose.data == "ok") {
+                        if (respose.data.status == 200) {
                             alert("修改成功！");
                             user.editpanelClose();
                             user.getUserListData();
 
                         } else {
-                            alert("修改失败")
+                            alert(respose.data.msg);
                         }
                     });
                 } else {
@@ -456,22 +462,24 @@
                 //console.log(this.userRoleModel)
                 this.userListPanelShowFlag = this.addUserPanelShowFlag = false;
                 this.userRolePanelShowFlag = true;
+                //获取已有身份
                 axios.post(this.roleListApi, {
                     id: this.userRoleModel.id
                 }).then(res => {
-                    if (res.data != 'no') {
-                        user.roleListData = res.data;
+                    if (res.data.status == 200) {
+                        user.roleListData = JSON.parse(res.data.data);
                     } else {
-                        alert("查无此人");
+                        alert(res.data.msg);
                     }
-                    });
+                });
+                //获取未有身份
                 axios.post(this.noRoleListApi, {
                     id: this.userRoleModel.id
                 }).then(res => {
-                    if (res.data != 'no') {
-                        user.noRoleListData = res.data;
+                    if (res.data.status == 200) {
+                        user.noRoleListData = JSON.parse(res.data.data);
                     } else {
-                        alert("查无此人");
+                        alert(res.data.msg);
                     }
                 })
 
@@ -511,12 +519,12 @@
                     idList: roleIdList,
                     id: this.userRoleModel.id
                 }).then(res => {
-                    if (res.data != "no") {
+                    if (res.data.status == 200) {
                         alert("修改成功");
                     } else {
-                        alert("修改失败")
+                        alert(res.data.msg);
                     }
-                    })
+                })
                 this.rolepanelClose();
             },
 
@@ -529,18 +537,22 @@
                 axios.post(this.actionListApi, {
                     id: ID
                 }).then(res => {
-                    user.actionListData = res.data;
+                    if (res.data.status == 200) {
+                        user.actionListData = JSON.parse(res.data.data);
+                    } else {
+                        alert(res.data.msg);
+                    }
                 })
             },
             //获取所有权限
             getAllActionData: function (ID) {
                 axios.post(this.allActionListApi, {
-                    id:ID
+                    id: ID
                 }).then(res => {
-                    if (res.data != "no") {
-                        user.allActionListData = res.data;
+                    if (res.data.status == 200) {
+                        user.allActionListData = JSON.parse(res.data.data);
                     } else {
-                        alert("查询出错")
+                        alert(res.data.msg);
                     }
                 });
             },
@@ -549,7 +561,11 @@
                 axios.post(this.porhibitActionLsitApi, {
                     id: ID
                 }).then(res => {
-                    user.porhibitActionListData = res.data;
+                    if (res.data.status == 200) {
+                        user.porhibitActionListData = JSON.parse(res.data.data);
+                    } else {
+                        alert(res.data.msg);
+                    }
                 })
             },
             //打开权限面板
@@ -578,7 +594,7 @@
                 //console.log(this.userRoleModel)
             },
             //添加权限
-            addUserAction: function (ID) {                                
+            addUserAction: function (ID) {
                 axios.post(this.editUserActionApi, {
                     userID: this.userRoleModel.id,
                     actionID: ID,
@@ -587,9 +603,9 @@
                     user.getUserActionData(this.userRoleModel.id);
                     user.getUserPorhibitActionData(this.userRoleModel.id);
                     user.getAllActionData(this.userRoleModel.id)
-                    alert(res.data)
+                    alert(res.data.msg)
                 });
-               
+
             },
             //禁用权限
             prohibitUserAction: function (ID) {
@@ -601,9 +617,9 @@
                     user.getUserActionData(this.userRoleModel.id);
                     user.getUserPorhibitActionData(this.userRoleModel.id);
                     user.getAllActionData(this.userRoleModel.id);
-                    alert(res.data)
-                    });
-               
+                    alert(res.data.msg)
+                });
+
             },
             //清理权限
             delUserAction: function (ID) {
@@ -614,7 +630,7 @@
                     user.getUserActionData(this.userRoleModel.id);
                     user.getUserPorhibitActionData(this.userRoleModel.id);
                     user.getAllActionData(this.userRoleModel.id);
-                    alert(res.data);
+                    alert(res.data.msg);
                 })
             }
         },
@@ -647,7 +663,7 @@
                         result = year + '.' + month + '.' + day;
                     }
                 } catch (e) {
-                    result="null"
+                    result = "null"
                 }
                 return result;
             }
@@ -655,5 +671,3 @@
     })
 
 </script>
-</html>
-

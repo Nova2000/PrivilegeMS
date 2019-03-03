@@ -298,3 +298,5 @@ D:\Project Engineering\PrivilegeMS\PrivilegeMS.WebAPP\obj\Debug\PrivilegeMS.WebA
 D:\Project Engineering\PrivilegeMS\PrivilegeMS.WebAPP\bin\Newtonsoft.Json.dll
 D:\Project Engineering\PrivilegeMS\PrivilegeMS.WebAPP\bin\Newtonsoft.Json.pdb
 D:\Project Engineering\PrivilegeMS\PrivilegeMS.WebAPP\bin\Newtonsoft.Json.xml
+D:\Project Engineering\PrivilegeMS\PrivilegeMS.WebAPP\bin\PrivilegeMS.Common.dll
+D:\Project Engineering\PrivilegeMS\PrivilegeMS.WebAPP\bin\PrivilegeMS.Common.pdb

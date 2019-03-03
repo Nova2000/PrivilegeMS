@@ -43,7 +43,8 @@ namespace PrivilegeMS.WebAPP.Controllers
                 ModifiedTime = u.ModifiedTime
             });
             var ret = JsonConvert.SerializeObject(user, Formatting.Indented);
-            return Content(ret);
+            string jsontxt = Common.JsonHelper.ResposeJson(200, ret, "ok");
+            return Content(jsontxt);
         }
         // POST 添加用户
         [HttpPost]
@@ -57,21 +58,32 @@ namespace PrivilegeMS.WebAPP.Controllers
                 SubTime = DateTime.Now,
                 DelFlag = true
             };
-            var user = userInfoService.AddEntity(userInfo);
-            if (user.ID != 0 && user != null)
+            try
             {
-                return Content("ok");
+                var user = userInfoService.AddEntity(userInfo);
+                if (user.ID != 0 && user != null)
+                {
+                    string jsondata = Common.JsonHelper.ResposeJson(200, null, "ok");
+                    return Content(jsondata);
+                }
+                else
+                {
+                    string jsondata = Common.JsonHelper.ResposeJson(404, null, "添加用户失败");
+                    return Content(jsondata);
+                }
             }
-            else
+            catch (Exception)
             {
-                return Content("no");
+
+                string jsondata = Common.JsonHelper.ResposeJson(404, null, "添加用户失败,检查用户账号是否重名");
+                return Content(jsondata);
             }
         }
         // POST 删除用户
         [HttpPost]
         public ActionResult DeleteUser(int id)
         {
-
+            string jsondata;
             var user = userInfoService.LoadEntities(u => u.ID == id && u.DelFlag == true).FirstOrDefault();
             if (user != null)
             {
@@ -79,15 +91,18 @@ namespace PrivilegeMS.WebAPP.Controllers
                 var delflag = userInfoService.EditEntity(user);
                 if (delflag)
                 {
-                    return Content("ok");
+                    jsondata = Common.JsonHelper.ResposeJson(200, null, "ok");
+                    return Content(jsondata);
                 }
             }
-            return Content("no");
+            jsondata = Common.JsonHelper.ResposeJson(404, null, "删除用户失败");
+            return Content(jsondata);
         }
         //修改用户
         [HttpPost]
         public ActionResult EditUser(int id, string name, string pwd)
         {
+            string jsondata;
             var user = userInfoService.LoadEntities(u => u.ID == id && u.DelFlag == true).FirstOrDefault();
             if (user != null)
             {
@@ -97,43 +112,52 @@ namespace PrivilegeMS.WebAPP.Controllers
                 var editflag = userInfoService.EditEntity(user);
                 if (editflag)
                 {
-                    return Content("ok");
+                    jsondata = Common.JsonHelper.ResposeJson(200, null, "ok");
+                    return Content(jsondata);
                 }
             }
-            return Content("no");
+            jsondata = Common.JsonHelper.ResposeJson(404, null, "修改用户失败");
+            return Content(jsondata);
         }
         //获取已有角色身份
         [HttpPost]
         public ActionResult GetUsetRoleList(int id)
         {
+            string jsondata;
             var userinfo = userInfoService.LoadEntities(u => u.ID == id && u.DelFlag == true).FirstOrDefault();
             if (userinfo!=null)
             {
                 var userRoleIdList = (from a in userinfo.RoleInfo select a.ID).ToList();
                 var roleinfo = roleInfoService.LoadEntities(r => r.DelFlag == true&& userRoleIdList.Contains(r.ID)).Select(r => new { ID = r.ID, Name = r.Name, SubTime = r.SubTime, Remark = r.Remark,Sort=r.Sort });
                 string jsonTxt = JsonConvert.SerializeObject(roleinfo, Newtonsoft.Json.Formatting.Indented);
-                return Content(jsonTxt);
+                jsondata = Common.JsonHelper.ResposeJson(200, jsonTxt, "ok");
+                return Content(jsondata);
             }
-            return Content("no");
+            jsondata = Common.JsonHelper.ResposeJson(404, null, "获取用户角色身份信息失败");
+            return Content(jsondata);
         }
         //获取未有角色身份
         [HttpPost]
         public ActionResult GetUsetOutsideRoleList(int id)
         {
+            string jsondata;
             var userinfo = userInfoService.LoadEntities(u => u.ID == id && u.DelFlag == true).FirstOrDefault();
             if (userinfo != null)
             {
                 var userRoleIdList = (from a in userinfo.RoleInfo select a.ID).ToList();
                 var roleinfo = roleInfoService.LoadEntities(r => r.DelFlag == true&& !userRoleIdList.Contains(r.ID)).Select(r => new { ID = r.ID, Name = r.Name, SubTime = r.SubTime, Remark = r.Remark, Sort = r.Sort });
                 string jsonTxt = JsonConvert.SerializeObject(roleinfo, Newtonsoft.Json.Formatting.Indented);
-                return Content(jsonTxt);
+                jsondata = Common.JsonHelper.ResposeJson(200, jsonTxt, "ok");
+                return Content(jsondata);
             }
-            return Content("no");
+            jsondata = Common.JsonHelper.ResposeJson(404, null, "获取用户未拥有角色身份信息失败");
+            return Content(jsondata);
         }
         //修改用户角色身份
         [HttpPost]
         public ActionResult EditUserRole(string idList,int id)
         {
+            string jsondata;
             string[] IdListS = idList.Substring(1, idList.Length - 2).Split(',');
             if (IdListS[0]!="")
             {
@@ -144,16 +168,19 @@ namespace PrivilegeMS.WebAPP.Controllers
                 }
                 if (userInfoService.SetUserRoleInfo(id, IdList))
                 {
-                    return Content("ok");
+                    jsondata = Common.JsonHelper.ResposeJson(200, null, "ok");
+                    return Content(jsondata);
                 }
             }
-            return Content("no");
+            jsondata = Common.JsonHelper.ResposeJson(404, null, "修改用户角色身份失败");
+            return Content(jsondata);
         }
 
         //展示用户未启用/仅有的权限
         [HttpPost]
         public ActionResult GetUserWithoutAction(int ID)
         {
+            string jsondata;
             var userInfo = userInfoService.LoadEntities(u => u.ID == ID && u.DelFlag == true).FirstOrDefault();
             if (userInfo!=null)
             {
@@ -176,16 +203,20 @@ namespace PrivilegeMS.WebAPP.Controllers
                     if (actionInfoList != null)
                     {
                         string jsonTxt = JsonConvert.SerializeObject(actionInfoList, Formatting.Indented);
-                        return Content(jsonTxt);
+                        jsondata = Common.JsonHelper.ResposeJson(200, jsonTxt, "ok");
+                        return Content(jsondata);
+                       
                     }
                 }
             }
-            return Content("no");
+            jsondata = Common.JsonHelper.ResposeJson(404, null, "获取用户未启用权限失败");
+            return Content(jsondata);
         }
         //展示用户已有权限
         [HttpPost]
         public ActionResult UserAction(int id)
         {
+            string jsondata;
             var userInfo = userInfoService.LoadEntities(u => u.ID == id && u.DelFlag == true).FirstOrDefault();
             if (userInfo!=null)
             {
@@ -209,17 +240,20 @@ namespace PrivilegeMS.WebAPP.Controllers
                     if (actionInfoList!=null)
                     {
                         string jsonTxt = JsonConvert.SerializeObject(actionInfoList, Formatting.Indented);
-                        return Content(jsonTxt);
+                        jsondata = Common.JsonHelper.ResposeJson(200, jsonTxt, "ok");
+                        return Content(jsondata);
                     }
 
                 }
             }
-            return Content("no");
+            jsondata = Common.JsonHelper.ResposeJson(404, null, "获取用户已有权限失败");
+            return Content(jsondata);
         }
         //展示用户已禁用权限
         [HttpPost]
         public ActionResult UserPorhibitAction(int id)
         {
+            string jsondata;
             var userInfo = userInfoService.LoadEntities(u => u.ID == id && u.DelFlag == true).FirstOrDefault();
             if (userInfo != null)
             {
@@ -243,31 +277,37 @@ namespace PrivilegeMS.WebAPP.Controllers
                     if (actionInfoList != null)
                     {
                         string jsonTxt = JsonConvert.SerializeObject(actionInfoList, Formatting.Indented);
-                        return Content(jsonTxt);
+                        jsondata = Common.JsonHelper.ResposeJson(200, jsonTxt, "ok");
+                        return Content(jsondata);
                     }
 
                 }
             }
-            return Content("no");
+            jsondata = Common.JsonHelper.ResposeJson(404, null, "获取用户已禁用权限失败");
+            return Content(jsondata);
         }
         //为用户添加/禁用权限
         [HttpPost]
         public ActionResult EditUserAction(int userID,int actionID,bool isPass)
         {
+            string jsondata;
             if (userInfoService.SetUserActionInfo(actionID,userID, isPass))
             {
                 if (isPass)
                 {
-                    return Content("启用成功");
+                    jsondata = Common.JsonHelper.ResposeJson(200, null, "启用成功");
+                    return Content(jsondata);
                 }
                 else
                 {
-                    return Content("禁用成功");
+                    jsondata = Common.JsonHelper.ResposeJson(200, null, "禁用成功");
+                    return Content(jsondata);
                 }
             }
             else
             {
-                return Content("修改失败");
+                jsondata = Common.JsonHelper.ResposeJson(404, null, "修改失败");
+                return Content(jsondata);
             }
         }
         
@@ -275,19 +315,23 @@ namespace PrivilegeMS.WebAPP.Controllers
         [HttpPost]
         public ActionResult DelUserAction(int userID,int actionID)
         {
+            string jsondata;
             var rUserInfoActionInfo = rUserInfoActionInfoService.LoadEntities(r => r.UserInfoID == userID && r.ActionInfoID == actionID).FirstOrDefault();
             if (rUserInfoActionInfo!=null)
             {
                 if (rUserInfoActionInfoService.DeleteEntity(rUserInfoActionInfo))
                 {
-                    return Content("删除成功");
+                    jsondata = Common.JsonHelper.ResposeJson(200, null, "删除成功");
+                    return Content(jsondata);
                 }
                 else
                 {
-                    return Content("删除失败");
+                    jsondata = Common.JsonHelper.ResposeJson(404, null, "删除失败");
+                    return Content(jsondata);
                 }
             }
-            return Content("数据不存在");
+            jsondata = Common.JsonHelper.ResposeJson(404, null, "数据不存在");
+            return Content(jsondata);
         }
     }
 }

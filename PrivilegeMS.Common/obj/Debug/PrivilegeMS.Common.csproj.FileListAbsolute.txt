@@ -9,3 +9,7 @@ D:\Project Engineering\PrivilegeMS\PrivilegeMS.Common\obj\Debug\PrivilegeMS.Comm
 D:\Project Engineering\PrivilegeMS\PrivilegeMS.Common\obj\Debug\PrivilegeMS.Common.csproj.CoreCompileInputs.cache
 D:\Project Engineering\PrivilegeMS\PrivilegeMS.Common\obj\Debug\PrivilegeMS.Common.dll
 D:\Project Engineering\PrivilegeMS\PrivilegeMS.Common\obj\Debug\PrivilegeMS.Common.pdb
+D:\Project Engineering\PrivilegeMS\PrivilegeMS.Common\bin\Debug\Newtonsoft.Json.dll
+D:\Project Engineering\PrivilegeMS\PrivilegeMS.Common\bin\Debug\Newtonsoft.Json.pdb
+D:\Project Engineering\PrivilegeMS\PrivilegeMS.Common\bin\Debug\Newtonsoft.Json.xml
+D:\Project Engineering\PrivilegeMS\PrivilegeMS.Common\obj\Debug\PrivilegeMS.Common.csproj.CopyComplete

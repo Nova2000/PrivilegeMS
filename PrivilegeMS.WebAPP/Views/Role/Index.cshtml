@@ -191,6 +191,9 @@
     <a class="btn btn-default btn-block" href="/home/index"> 返回首页</a>
 
 </body>
+
+</html>
+
 <script>
     var roleInfo = new Vue({
         el: "#role",
@@ -202,17 +205,17 @@
             remark: '',
             editremark: '',
             sort: '',
-            editsort:'',
+            editsort: '',
             //获取roleInfoList
             roleListApiUrl: '/Role/RoleList',
             jsondata: [],
             //提交权限配置
-            roleActionPostApiUrl:'/Role/SetRoleAction',
+            roleActionPostApiUrl: '/Role/SetRoleAction',
             //权限
             noActionApiUrl: '/Role/NoActioninfo',
-            actionApiUrl:'/Role/Actioninfo',
+            actionApiUrl: '/Role/Actioninfo',
             actionData: [],
-            noActionData:[],
+            noActionData: [],
             //添加roleInfo
             addRoleApiUrl: '/Role/AddRole',
             //删除用户
@@ -228,44 +231,48 @@
             listFlag: true,
             roleActionFlag: false,
             //角色权限信息
-            userRole: [{ id:'',name: '', subTime: '',remark:''}]
+            userRole: [{ id: '', name: '', subTime: '', remark: '' }]
         },
         methods: {
             //获取角色列表
             getRequest: function () {
                 axios.get(this.roleListApiUrl).then(function (res) {
-                    roleInfo.jsondata = res.data;
+                    if (res.data.status == 200) {
+                        roleInfo.jsondata = JSON.parse(res.data.data);
+                    } else {
+                        alert(res.data.msg);
+                    }
                 })
             },
             //添加角色
             addrole: function () {
-              
+
                 if (this.name != "" && this.remark != "" && this.sort != "") {
                     axios.post(this.addRoleApiUrl, {
                         name: this.name,
                         remark: this.remark,
                         sort: this.sort
                     }).then(respose => {
-                        if (respose.data == 'ok') {
+                        if (respose.data.status == 200) {
                             alert("添加成功");
                             this.name = this.remark = this.sort = "";
                             this.getRequest();
                         } else {
-                            alert("添加失败，请检查信息后重新添加");
+                            alert(respose.data.msg);
                         }
-                        }).catch(error => {
-                            if (error.response) {
-                                console.log(error.response.data);
-                                console.log(error.response.status);
-                                console.log(error.response.headers);
-                            } else if (error.request) {
-                                
-                                console.log(error.request);
-                            } else {
-                                console.log('Error', error.message);
-                            }
-                            console.log(error.config);
-                        })
+                    }).catch(error => {
+                        if (error.response) {
+                            console.log(error.response.data);
+                            console.log(error.response.status);
+                            console.log(error.response.headers);
+                        } else if (error.request) {
+
+                            console.log(error.request);
+                        } else {
+                            console.log('Error', error.message);
+                        }
+                        console.log(error.config);
+                    })
                 } else {
                     alert("请检查输入是否完成！")
                 }
@@ -278,11 +285,10 @@
                     axios.post(this.deleteApiUrl, {
                         id: itemId
                     }).then(function (respose) {
-                        if (respose.data == 'ok') {
+                        if (respose.data.status == 200) {
                             roleInfo.getRequest();
-
                         } else {
-                            alert("禁用失败")
+                            alert(respose.data.msg);
                         }
                     })
                 }
@@ -314,18 +320,18 @@
                         remark: this.editremark,
                         sort: this.editsort
                     }).then(respose => {
-                        if (respose.data == 'ok') {
+                        if (respose.data.status == 200) {
                             alert("修改成功！");
                             roleInfo.getRequest();
                             roleInfo.editname = roleInfo.editroleID = roleInfo.editremark = roleInfo.editsort = '';
                             roleInfo.editpanelClose();
                         } else {
-                            alert("修改失败");
+                            alert(respose.data.msg);
                         }
-                        }).catch(error => {
-                            alert("请求出错");
-                            console.log("ErrorMsg:", error.message);
-                        })
+                    }).catch(error => {
+                        alert("请求出错");
+                        console.log("ErrorMsg:", error.message);
+                    })
                 }
             },
             //打开权限配置页面
@@ -340,13 +346,21 @@
                 axios.post(this.noActionApiUrl, {
                     id: roleInfo.userRole.id
                 }).then(res => {
-                    roleInfo.noActionData = res.data;
+                    if (res.data.status == 200) {
+                        roleInfo.noActionData = JSON.parse(res.data.data);
+                    } else {
+                        alert(res.data.msg);
+                    }
                 });
                 axios.post(this.actionApiUrl, {
                     id: roleInfo.userRole.id
                 }).then(res => {
-                    roleInfo.actionData = res.data;
-                    });
+                    if (res.data.status == 200) {
+                        roleInfo.actionData = JSON.parse(res.data.data);
+                    } else {
+                        alert(res.data.msg);
+                    }
+                });
 
 
             },
@@ -381,13 +395,13 @@
                 axios.post(this.roleActionPostApiUrl, {
                     idList: IdList,
                     id: roleInfo.userRole.id
-                }).then(response => {
-                    if (response.data == "ok") {
+                }).then(respose => {
+                    if (respose.data.status == 200) {
                         alert('ok');
                     } else {
-                        alert("no");
+                        alert(respose.data.msg);
                     }
-                    });
+                });
                 this.roleClose();
 
             }
@@ -430,5 +444,3 @@
     })
 
 </script>
-</html>
-
