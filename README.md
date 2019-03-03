@@ -25,7 +25,7 @@
 
 ## 使用
 
-开发工具为 VS2017 + SQL Server2012，数据库在文件夹 database 中，数据库连接方式为 Windows身份验证模式，讲数据库附加在本机的 SQL Server上，并在 VS 中打开项目，启动项设置为 WebAPP，即可开始使用。
+开发工具为 VS2017 + SQL Server2012，数据库在文件夹 database 中，数据库连接方式为 Windows身份验证模式，将数据库附加在本机的 SQL Server上，并在 VS 中打开项目，启动项设置为 WebAPP，即可开始使用。
 
 初始具有所有权限的账户为：
 
