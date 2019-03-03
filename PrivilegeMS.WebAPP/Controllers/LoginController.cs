@@ -14,6 +14,7 @@ namespace PrivilegeMS.WebAPP.Controllers
         {
             return View();
         }
+        [HttpPost]
         public ActionResult UserLogin()
         {
             string account = Request["Name"];
@@ -32,6 +33,7 @@ namespace PrivilegeMS.WebAPP.Controllers
             }
            
         }
+        [HttpGet]
         public ActionResult LogOut()
         {
             //if(Session["userInfo"] != null)

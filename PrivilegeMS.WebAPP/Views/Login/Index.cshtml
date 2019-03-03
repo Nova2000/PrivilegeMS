@@ -50,26 +50,39 @@
     </div>
 </body>
 <script>
-    $("#btn").click(function () {
-        $.ajax({
-            type: "POST",
-            url: "/Login/UserLogin",
-            data: {
-                "Name": $("#name").val(),
-                "Pwd": $("#pwd").val()
-            },
-            success: function (data) {
-                if (data == "ok") {
-                    window.location = "/Home/index";
-                } else {
-                    alert("账号密码错误");
+   
+    function login() {
+        if ($("#name").val().length == 9 && $("#pwd").val() != '') {
+            $.ajax({
+                type: "POST",
+                url: "/Login/UserLogin",
+                data: {
+                    "Name": $("#name").val
+                        (),
+                    "Pwd": $("#pwd").val()
+                },
+                success: function (data) {
+                    if (data == "ok") {
+                        window.location = "/Home/index";
+                    } else {
+                        alert("账号密码错误");
+                    }
+                },
+                error: function (data) {
+                    alert(data);
                 }
-            },
-            error: function (data) {
-                alert(data);
-            }
-        })
-    });
+            })
+        } else {
+            alert("请检查账户和密码输入是否有误")
+        }
+        
+    }
+    $("#pwd").keydown(function (event) {
+        if (event.keyCode==13) {
+            login();
+        }
+    })
+    $("#btn").click(login);
     $("#logout").click(function () {
         $.ajax({
             type: "GET",

@@ -5,8 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>用户</title>
-    <script src="~/Scripts/vue.min.js"></script>
+    <title>用户管理</title>
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.7.0/animate.min.css">
@@ -56,9 +55,9 @@
 
                         </table>
                         @*<ul class="pagination">
-                            <li><a href="#">&laquo;</a></li>
-                            <li><a href="#">1</a></li>
-                        </ul>*@
+                                <li><a href="#">&laquo;</a></li>
+                                <li><a href="#">1</a></li>
+                            </ul>*@
                     </div>
                 </div>
             </div>
@@ -261,7 +260,7 @@
                     </table>
 
                 </div>
-               <!--所有权限-->
+                <!--所有权限-->
                 <table class="table  table-hover table-bordered">
                     <caption class="text-center"><h4>所有权限</h4></caption>
                     <thead>
@@ -300,6 +299,7 @@
     <a class="btn btn-default btn-block" href="/home/index"> 返回首页</a>
 </body>
 </html>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.min.js"></script>
 <script>
     var user = new Vue({
         el: "#user",

@@ -25,6 +25,7 @@ namespace PrivilegeMS.WebAPP.Controllers
         /// <returns></returns>
        public ActionResult GetMenus()
         {
+            string jsondata;
             int userID = Convert.ToInt32(Session["userID"]);
             var userInfo = userInfoService.LoadEntities(u => u.ID == userID && u.DelFlag == true).FirstOrDefault();
             if (userInfo!=null)
@@ -62,15 +63,11 @@ namespace PrivilegeMS.WebAPP.Controllers
                     Url = a.Url
                 });
                 string datatxt = JsonConvert.SerializeObject(lastActionInfo, Formatting.Indented);
-                string jsontxt = JsonConvert.SerializeObject(new
-                {
-                    status = 200,
-                    data = datatxt,
-                    msg = "ok"
-                });
-                return Content(jsontxt);
+                jsondata = Common.JsonHelper.ResposeJson(200, datatxt, "ok");
+                return Content(jsondata);
             }
-            return Content("no");
+            jsondata = Common.JsonHelper.ResposeJson(404, null, "获取菜单列表失败");
+            return Content(jsondata);
         }
        
     }
