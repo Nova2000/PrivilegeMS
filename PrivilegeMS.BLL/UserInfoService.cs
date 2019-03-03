@@ -16,13 +16,16 @@ namespace PrivilegeMS.BLL
             if (userInfo!=null)
             {
                 userInfo.RoleInfo.Clear();
-                foreach (int roleId in roleIdList)
+                if (roleIdList.Count>0)
                 {
-                    var roleInfo = this.CurrentDBSession.RoleInfoDal.LoadEntities(r => r.ID == roleId && r.DelFlag == true).FirstOrDefault();
-                    if (roleInfo!=null)
+                    foreach (int roleId in roleIdList)
                     {
-                        userInfo.RoleInfo.Add(roleInfo);
-                    }
+                        var roleInfo = this.CurrentDBSession.RoleInfoDal.LoadEntities(r => r.ID == roleId && r.DelFlag == true).FirstOrDefault();
+                        if (roleInfo != null)
+                        {
+                            userInfo.RoleInfo.Add(roleInfo);
+                        }
+                    } 
                 }
                 return this.CurrentDBSession.SaveChanges();
             }

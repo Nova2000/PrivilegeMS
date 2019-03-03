@@ -169,9 +169,12 @@ namespace PrivilegeMS.WebAPP.Controllers
             string jsondata;
             string[] IdListS = idList.Substring(1, idList.Length - 2).Split(',');
             List<int> IdList = new List<int>();
-            foreach (var item in IdListS)
+            if (IdListS[0]!="")
             {
-                IdList.Add(Convert.ToInt32(item));
+                foreach (var item in IdListS)
+                {
+                    IdList.Add(Convert.ToInt32(item));
+                }
             }
             if (roleInfoService.SetRoleActionInfo(id,IdList))
             {

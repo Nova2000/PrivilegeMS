@@ -159,13 +159,21 @@ namespace PrivilegeMS.WebAPP.Controllers
         {
             string jsondata;
             string[] IdListS = idList.Substring(1, idList.Length - 2).Split(',');
+            List<int> IdList = new List<int>();
             if (IdListS[0]!="")
             {
-                List<int> IdList = new List<int>();
                 foreach (var item in IdListS)
                 {
                     IdList.Add(Convert.ToInt32(item));
                 }
+                if (userInfoService.SetUserRoleInfo(id, IdList))
+                {
+                    jsondata = Common.JsonHelper.ResposeJson(200, null, "ok");
+                    return Content(jsondata);
+                }
+            }
+            else
+            {
                 if (userInfoService.SetUserRoleInfo(id, IdList))
                 {
                     jsondata = Common.JsonHelper.ResposeJson(200, null, "ok");
